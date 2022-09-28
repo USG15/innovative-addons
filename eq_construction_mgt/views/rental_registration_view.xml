@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+    <record id="rental_registration_form_view" model="ir.ui.view">
+        <field name="name">rental.registration.form</field>
+        <field name="model">rental.registration</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="do_confirm" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_payments" class="oe_stat_button" icon="fa-tasks" states="confirm">
+                            <field name="rent_payment_count" widget="statinfo" string="Payments"/>
+                        </button>
+                    </div>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1" class="oe_inline" attrs="{'invisible': [('name','=',False)]}"/>
+                    </h1>
+                    <group col="4">
+                        <field name="partner_id" attrs="{'readonly':[('state','=','confirm')]}" options="{'no_create':True}" domain="[('customer','=',True),('parent_id', '=', False)]" context="{'default_customer':True}" required="1"/>
+                        <field name="project_id" attrs="{'readonly':[('state','=','confirm')]}" options="{'no_create':True}" domain="[('project_type','=','Rental')]" required="1"/>
+                        <field name="start_date" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="end_date" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="security_deposite_amt" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="advance_rent_month" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="rental_due_date" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="monthly_rent_amt" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="document_status" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="vacation_date"/>
+                        <field name="contract_amt"/>
+                        <field name="company_id" required="1" options="{'no_create': True}" invisible="1"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group>
+                        <button name="generate_schedule" states="draft,confirm" class="oe_highlight" string="Generate Schedule" type="object"/>
+                    </group>
+                    <notebook>
+                        <page name="registration_lines" string="Registration Lines">
+                            <field name="registration_lines" attrs="{'readonly':[('state','=','confirm')]}">
+                                <tree editable="bottom" delete="0" create="0">
+                                    <field name="sr_no"/>
+                                    <field name="months" required="1"/>
+                                    <field name="due_rental" required="1"/>
+                                    <field name="amount" readonly="1" force_save="1" required="1" sum="Total Amount"/>
+                                    <field name="rental_payment"/>
+                                    <field name="adjustment" invisible="1" sum="Total Adjustment"/>
+                                    <field name="received" required="1" sum="Total Received"/>
+                                    <field name="pending" required="1" sum="Total Pending"/>
+                                    <field name="rental_registration_id" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="date_month" invisible="1"/>
+                                    <field name="date_year" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <button name="do_payment" class="oe_highlight" string="Pay" type="object"
+                                        attrs="{'invisible':['|',('rental_payment','=','Paid'),('state','=','draft')]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="rental_registration_tree_view" model="ir.ui.view">
+        <field name="name">rental.registration.tree</field>
+        <field name="model">rental.registration</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="project_id"/>
+                <field name="state"/>
+                <field name="contract_amt" sum="Total Contract Amount"/>
+                <field name="company_id" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="rental_registration_search_view" model="ir.ui.view">
+        <field name="name">rental.registration.search</field>
+        <field name="model">rental.registration</field>
+        <field name="arch" type="xml">
+            <search string="Work Order">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="project_id"/>
+                <field name="state"/>
+                <group expand="0" string="Group By">
+                    <filter string="Customer" name="partner_id" context="{'group_by':'partner_id'}"/>
+                    <filter string="Project" name="project_id" context="{'group_by':'project_id'}"/>
+                    <filter string="State" name="state" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_rental_registration" model="ir.actions.act_window">
+        <field name="name">Rental Registration</field>
+        <field name="res_model">rental.registration</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_rental_registration" id="menu_rental_registration"
+        parent="sub_menu_register" sequence="150"/>
+
+    <record id="inherit_view_account_payment_form" model="ir.ui.view">
+        <field name="name">account.payment.form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <field name="communication" position="after">
+                <field name="rental_registration_line_id" invisible="1"/>
+            </field>
+            <field name="communication" position="attributes">
+                <attribute name="readonly">1</attribute>
+                <attribute name="force_save">1</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="inherit_view_account_payment_form_inherit_payment" model="ir.ui.view">
+        <field name="name">account.payment.form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="payment.view_account_payment_form_inherit_payment"/>
+        <field name="arch" type="xml">
+            <field name="payment_transaction_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="inherit_view_account_payment_invoice_form" model="ir.ui.view">
+        <field name="name">account.payment.form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_invoice_form"/>
+        <field name="arch" type="xml">
+            <field name="communication" position="after">
+                <field name="instrument_number"/>
+            </field>
+            <field name="journal_id" position="after">
+                <field name="vendor_credit_account_id"/>
+            </field>
+            <field name="communication" position="attributes">
+                <attribute name="readonly">1</attribute>
+                <attribute name="force_save">1</attribute>
+            </field>
+        </field>
+    </record>
+    
+
+    </data>
+</odoo>

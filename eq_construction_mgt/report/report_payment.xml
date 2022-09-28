@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_receipt_document">
+            <t t-call="report.external_layout">
+                <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+                <div class="page">
+                    <br/>
+                    <div class="header" style="text-align:center;"><h1><strong>Payment Receipt</strong></h1></div>
+                    <div class="row mt32 mb32">
+                        <div class="col-xs-6">
+                            <strong><span t-field="o.partner_type"/><span>:</span></strong>
+                            <span t-field="o.partner_id"/>
+                        </div>
+                        <div class="col-xs-6">
+                            <strong>Reference NO:</strong>
+                            <span t-field="o.name"/>
+                        </div>
+                    </div>
+
+                    <div class="row mt32 mb32">
+                        <div class="col-xs-6">
+                            <strong>Payment Journal</strong>
+                            <span t-field="o.journal_id"/>
+                        </div>
+                        <div class="col-xs-6">
+                            <strong>Payment Date:</strong>
+                            <span t-field="o.payment_date"/>
+                        </div>
+                    </div>
+
+                    <div class="row mt32 mb32">
+                        <div class="col-xs-6">
+                            <strong>Payment Amount</strong>
+                            <span t-field="o.amount"/>
+                        </div>
+                        <div class="col-xs-6">
+                            <strong>Memo:</strong>
+                            <span t-field="o.communication"/>
+                        </div>
+                    </div>
+
+                </div>
+            </t>
+        </template>
+
+        <template id="report_receipt">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="eq_construction_mgt.report_receipt_document" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

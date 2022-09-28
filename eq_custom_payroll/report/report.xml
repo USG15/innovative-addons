@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report 
+            id="action_print_payslip"
+            string="Payslip"
+            model="wizard.payslip.report" 
+            report_type="qweb-pdf"
+            file="eq_custom_payroll.report_payslip_template"
+            name="eq_custom_payroll.report_payslip_template"/>
+
+        <record id="action_print_payslip" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="hr_holidays.paperformat_hrsummary"/>
+        </record>
+
+        <report 
+            id="action_print_payslip_payment"
+            string="Payslip Payment"
+            model="payslip.partial.payment" 
+            report_type="qweb-pdf"
+            file="eq_custom_payroll.report_payslip_payment_template"
+            name="eq_custom_payroll.report_payslip_payment_template"/>
+
+        <report 
+            id="action_print_advance_salary"
+            string="Advance Salary Report"
+            model="employee.adv.payment" 
+            report_type="qweb-pdf"
+            file="eq_custom_payroll.report_advance_salary_template"
+            name="eq_custom_payroll.report_advance_salary_template"/>
+
+        <report 
+            id="action_print_employee_ledger_report"
+            string="Employee Ledger Report"
+            model="wizard.emp.ledger.report" 
+            report_type="qweb-pdf"
+            file="eq_custom_payroll.employee_ledger_report_template"
+            name="eq_custom_payroll.employee_ledger_report_template"/>
+
+    </data>
+</odoo>

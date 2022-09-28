@@ -1,0 +1,64 @@
+Name,model_id/id,margin_top,margin_left,margin_right,margin_bottom,paper_size,orientation,template_text,lang_id/id
+test3333,stock.model_stock_picking,11,11,11,11,A4,Portrait,<b>fwefewfw</b>,base.lang_en
+test import,stock.model_stock_picking,5,5,5,5,A4,Portrait,"<table style=""width: 935px;"" cellspacing=""0"" border=""0"">
+ <tbody>
+ <tr style=""height: 17px;"">
+ <td style=""height: 17px; width: 185px;"" align=""left""><span style=""font-family: times new roman,times,serif; font-size: 8pt;"">Test PDF template</span></td>
+ <td style=""height: 17px; width: 523.083px;"" align=""left""><span style=""font-family: Liberation Serif;""><br /></span></td>
+ <td style=""height: 17px; width: 222.917px;"" align=""left""><span style=""font-family: times new roman,times,serif;""><span style=""font-size: 8pt;"">Template01</span></span></td>
+ </tr>
+ <tr style=""height: 14px;"">
+ <td rowspan=""2"" style=""height: 89px; width: 185px;"" valign=""middle"" align=""center""></td>
+ <td style=""height: 14px; width: 523.083px;"" align=""left""><span style=""font-family: Liberation Serif;"">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></td>
+ <td style=""height: 14px; width: 222.917px;"" align=""left""><span style=""font-family: times new roman,times,serif; font-size: 8pt;"">Only print on draft, confirmed statas</span></td>
+ </tr>
+ <tr style=""height: 25px;"">
+ <td style=""height: 25px; width: 523.083px;"" align=""center""><span style=""font-family: 'times new roman', times, serif; font-size: 12pt;""><b><span>DocName: {name}</span></b></span></td>
+ <td style=""height: 25px; width: 222.917px;"" align=""left""><br /></td>
+ </tr>
+ </tbody>
+ </table>
+ <table style=""width: 935px;"" cellspacing=""0"" border=""0"">
+ <tbody>
+ <tr style=""height: 32px;"">
+ <td colspan=""9"" style=""height: 32px; width: 618px;"" align=""left""><span style=""font-family: 'times new roman', times, serif; font-size: 12pt;"">Origin: {origin}</span></td>
+ <td style=""height: 32px; width: 15px;"" align=""left""><span style=""font-family: 'times new roman', times, serif; font-size: 12pt;""></span></td>
+ <td style=""height: 32px; width: 381px;"" align=""left""><span style=""font-family: 'times new roman', times, serif; font-size: 12pt;"">Date: {min_date}</span></td>
+ </tr>
+ <tr style=""height: 17px;"">
+ <td colspan=""9"" style=""height: 17px; width: 618px;"" align=""left""><span style=""font-size: 12pt;""><strong><span style=""font-family: times new roman,times,serif;"">Location: {location_id}</span></strong></span></td>
+ <td style=""height: 17px; width: 15px;"" align=""left""><span style=""font-size: 12pt;""><strong><span style=""font-family: times new roman,times,serif;""></span></strong></span></td>
+ <td style=""height: 17px; width: 381px;"" align=""left""><span style=""font-size: 12pt;""><strong><span style=""font-family: times new roman,times,serif;"">Location Dest: {location_dest_id}</span></strong></span></td>
+ </tr>
+ </tbody>
+ </table>
+ <p><span style=""font-size: 12pt;"">{move_lines:{product_id,product_uom,product_uom_qty}}</span></p>
+ <p><span style=""font-size: 12pt;"">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style=""font-family: 'times new roman', times, serif;"">Total quantities: {function_simple:_get_total_qty}</span></span></p>
+ <table cellspacing=""0"" border=""0"" style=""width: 932px;""><colgroup width=""199""></colgroup> <colgroup width=""158""></colgroup> <colgroup width=""146""></colgroup> <colgroup width=""25""></colgroup> <colgroup width=""177""></colgroup>
+ <tbody>
+ <tr style=""height: 17px;"">
+ <td align=""right"" style=""width: 282px; height: 17px;""><span style=""font-family: 'times new roman', times, serif; font-size: 12pt;"">Partner name:</span><br /></td>
+ <td align=""left"" style=""width: 66px; height: 17px;""><span style=""font-family: 'Liberation Serif'; font-size: 10pt;"">&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.&nbsp;</span></td>
+ <td align=""left"" valign=""middle"" style=""width: 315px; height: 17px;""><span style=""font-family: 'times new roman', times, serif; font-size: 12pt;"">/{partner_id}/</span></td>
+ <td rowspan=""3"" align=""center"" valign=""middle"" style=""width: 33px; height: 46px;""><span style=""font-family: 'Liberation Serif';""><br /></span></td>
+ <td align=""left"" style=""width: 235px; height: 17px;""><br /></td>
+ </tr>
+ <tr style=""height: 14px;"">
+ <td align=""right"" style=""width: 282px; height: 14px;""><span style=""font-family: 'times new roman', times, serif; font-size: 12pt;"">Partner phone:</span></td>
+ <td align=""left"" style=""width: 66px; height: 14px;""><span style=""font-family: 'Liberation Serif'; font-size: 10pt;"">&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.&nbsp;&nbsp;&nbsp;</span></td>
+ <td align=""left"" style=""width: 315px; height: 14px;""><span style=""font-family: 'times new roman', times, serif; font-size: 12pt;"">/{partner_id:phone}/</span></td>
+ <td align=""left"" style=""width: 235px; height: 14px;""><span style=""font-family: 'times new roman', times, serif; font-size: 12pt;"">Print datetime:&nbsp;{print_date}</span></td>
+ </tr>
+ <tr style=""height: 15px;"">
+ <td align=""right"" style=""width: 282px; height: 15px;""><span style=""font-family: 'times new roman', times, serif; font-size: 12pt;"">Partner address:</span></td>
+ <td align=""left"" style=""width: 66px; height: 15px;"" colspan=""2""><span style=""font-family: 'times new roman', times, serif; font-size: 12pt;"">{partner_id:street}</span></td>
+ <td align=""left"" style=""width: 235px; height: 15px;""><br /></td>
+ </tr>
+ </tbody>
+ </table>
+ <div class=""mce-resize-bar mce-resize-bar-row"" style=""cursor: row-resize; margin: 0; padding: 0; position: absolute; left: 8px; top: 28px; height: 4px; width: 935px;""><br /></div>
+ <div class=""mce-resize-bar mce-resize-bar-row"" style=""cursor: row-resize; margin: 0; padding: 0; position: absolute; left: 8px; top: 63px; height: 4px; width: 935px;""><br /></div>
+ <div class=""mce-resize-bar mce-resize-bar-row"" style=""cursor: row-resize; margin: 0; padding: 0; position: absolute; left: 8px; top: 121px; height: 4px; width: 935px;""><br /></div>
+ <div class=""mce-resize-bar mce-resize-bar-col"" style=""cursor: col-resize; margin: 0; padding: 0; position: absolute; left: 193px; top: 8px; height: 116px; width: 4px;""><br /></div>
+ <div class=""mce-resize-bar mce-resize-bar-col"" style=""cursor: col-resize; margin: 0; padding: 0; position: absolute; left: 716px; top: 8px; height: 116px; width: 4px;""><br /></div>
+ <div class=""mce-resize-bar mce-resize-bar-col"" style=""cursor: col-resize; margin: 0; padding: 0; position: absolute; left: 940px; top: 8px; height: 116px; width: 4px;""><br /></div>",base.lang_en

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="report_picking" inherit_id="stock.report_picking">
+            <xpath expr="//div[@class='page']/h1" position="replace">
+                <t t-if="o.picking_type_id.code=='incoming'">
+                    <center><span style="font-weight:bold;font-size:25px;">Good Received Note</span></center>
+                </t>
+                <t t-if="o.picking_type_id.code=='outgoing'">
+                    <center><span class="text-center" style="font-weight:bold;font-size:25px;">Good Issued Note</span></center>
+                </t>
+                <t t-if="o.picking_type_id.code=='internal'">
+                    <center><span class="text-center" style="font-weight:bold;font-size:25px;">Good Internal Transfer</span></center>
+                </t>
+                <br/>
+                <span style="font-weight:bold;font-size:25px;" t-field="o.name" class="mt0"/>
+            </xpath>
+
+            <xpath expr="//table[@class='table table-condensed'][last()]" position="replace">
+                <table class="table table-condensed" t-if="o.pack_operation_ids">
+                    <t t-set="has_barcode" t-value="any([pack_operation.product_id and pack_operation.product_id.sudo().barcode or pack_operation.package_id for pack_operation in o.pack_operation_ids])"/>
+                    <t t-set="has_serial_number" t-value="o.pack_operation_ids.filtered('pack_lot_ids')" groups="stock.group_production_lot"/>
+                    <thead>
+                    <tr>
+                        <th><strong>Product</strong></th>
+                        <th><strong>To Do Quantity</strong></th>
+                        <th><strong>Done Quantity</strong></th>
+                        <t t-if="o.picking_type_id.code != 'incoming'"><th><strong>Source</strong></th></t>
+                        <th t-if="has_barcode" class="text-center">
+                            <strong>Barcode</strong>
+                        </th>
+                        <th t-if="has_serial_number">
+                            <strong>Lot/Serial Number</strong>
+                        </th>
+                        <t t-if="o.picking_type_id.code != 'outgoing'"><th><strong>Destination</strong></th></t>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <t t-set="pack_operation_ids" t-value="o.pack_operation_ids"/>
+                    <t groups="base.group_portal" t-set="pack_operation_ids" t-value="o.pack_operation_ids.sudo()"/>
+                    <tr t-foreach="pack_operation_ids" t-as="pack_operation">
+                        <td><span t-field="pack_operation.product_id"/><br/>
+                            <span t-field="pack_operation.product_id.description_picking"/>
+                            <t t-if="not pack_operation.product_id and pack_operation.package_id"><span  t-field="pack_operation.package_id"/></t></td>
+                        <td><span t-field="pack_operation.product_qty"/><span t-field="pack_operation.product_uom_id" groups="product.group_uom"/></td>
+                        <td><span t-field="pack_operation.qty_done"/><span t-field="pack_operation.product_uom_id" groups="product.group_uom"/></td>
+                        <t t-if="o.picking_type_id.code != 'incoming'"><td><span t-field="pack_operation.location_id"/>
+                            <span t-if="pack_operation.package_id">:</span>
+                            <span t-field="pack_operation.package_id"/>
+                            </td>
+                        </t>
+                        <td t-if="has_barcode">
+                            <span t-if="pack_operation.product_id and pack_operation.product_id.barcode">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', pack_operation.product_id.barcode, 600, 100)" style="width:300px;height:50px"/>
+                            </span>
+                            <span t-if="pack_operation.package_id and not pack_operation.product_id">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', pack_operation.package_id.name, 600, 100)" style="width:300px;height:50px"/>
+                            </span>
+                        </td>
+                        <td t-if="has_serial_number">
+                            <table class="table table-condensed" t-if="pack_operation.pack_lot_ids">
+                                <tr t-foreach="pack_operation.pack_lot_ids" t-as="packlot">
+                                    <td>
+                                        <span t-field="packlot.lot_id"/>
+                                        <t t-if="not packlot.lot_id">
+                                            <span t-field="packlot.lot_name"/>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <span t-field="packlot.qty"/> <t t-if="o.picking_type_id.use_existing_lots and o.state!='done'"> / <span t-field="packlot.qty_todo"/></t>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <t t-if="o.picking_type_id.code != 'outgoing'"><td><span t-field="pack_operation.location_dest_id"/>
+                            <span t-if="pack_operation.result_package_id">:</span>
+                            <span t-field="pack_operation.result_package_id"/>
+                        </td></t>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top:115px;">
+                    <table style="font-size:16px;border-collapse:separate;border-spacing:50px 0;">
+                        <thead>
+                            <tr>
+                                <td style="border-top: 1px solid black;padding:3px; text-align:center; width:333px">
+                                    <strong>Created By:</strong>
+                                </td>
+                                <td style="border-top: 1px solid black;padding:3px; text-align:center; width:333px">
+                                    <strong>Verified By:</strong>
+                                </td>
+                                <td style="border-top: 1px solid black;padding:3px; text-align:center; width:333px">
+                                    <strong>Approved By:</strong>
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
+                    <br/>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

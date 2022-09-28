@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_purchaseorder_document" inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//table[1]/thead/tr//th[last()]" position="before">
+            <th class="text-right"><strong>Disc. (%)</strong></th>
+        </xpath>
+        <xpath expr="//td[span[@t-field='line.price_subtotal']]" position="before">
+            <td class="text-right">
+                <span t-field="line.discount"/>
+            </td>
+        </xpath>
+
+        <xpath expr="//h2[last()]" position="replace"/>
+        <xpath expr="//h2" position="replace">
+            <h2 t-if="o.state != 'draft'">Approved PO #<span t-field="o.name"/></h2>
+            <h2 t-if="o.state == 'draft'">Draft PO #<span t-field="o.name"/></h2>
+        </xpath>
+
+        <xpath expr="//table[1]/thead/tr//th[2]" position="attributes">
+            <attribute name="class">hidden</attribute>
+        </xpath>
+        <xpath expr="//table[1]/tbody/tr//td[2]" position="attributes">
+            <attribute name="class">hidden</attribute>
+        </xpath>
+
+        <xpath expr="//table[1]/thead/tr//th[3]" position="attributes">
+            <attribute name="class">hidden</attribute>
+        </xpath>
+        <xpath expr="//table[1]/tbody/tr//td[3]" position="attributes">
+            <attribute name="class">hidden</attribute>
+        </xpath>
+
+<!-- 
+        <xpath expr="//table[1]/tbody/tr//td[2]" position="replace"/>
+
+        <xpath expr="//table[1]/thead/tr//th[3]" position="replace"/>
+        <xpath expr="//table[1]/tbody/tr//td[3]" position="replace"/> -->
+
+
+        <xpath expr="//div[@class='row']//div/table/tr[1]" position="attributes">
+            <attribute name="class">hidden</attribute>
+        </xpath>
+        <xpath expr="//div[@class='row']//div/table/tr[2]" position="attributes">
+            <attribute name="class">hidden</attribute>
+        </xpath>
+
+        <!-- <xpath expr="//div[@class='row']//div/table/tr[1]" position="replace"/>
+        <xpath expr="//div[@class='row']//div/table/tr[2]" position="replace"/> -->
+
+        
+    </template>
+</odoo>

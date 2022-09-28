@@ -1,0 +1,191 @@
+<odoo>
+    <data>
+        <template id="goods_receive_note_idss">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <div t-attf-class="article o_report_layout_standard o_company_#{o.id}_layout"
+                         t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+                         t-att-data-oe-lang="o and o.env.context.get('lang')">
+                        <t t-call="goods_receive_note.goods_receive_note_header_ids"/>
+                        <div class="page">
+                            <h2></h2>
+<br/>
+<br/>
+<br/>
+                            <table width="100%" style="font-size:12px; margin-top:-10px">
+                                <tr>
+                                    <td>Date:
+                                        <span t-field="o.min_date"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table width="100%">
+                                <tr>
+                                    <td width="20">
+                                        <strong>Source Document :</strong>
+                                        <span t-field="o.origin"></span>
+                                    </td>
+                                    <td width="60%"></td>
+                                    <td width="20%">
+                                        GRN:
+                                        <span t-field="o.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table style="font-size:10px;">
+
+                                <tr>
+                                    <td>
+                                        <b>Vendor :</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.partner_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span> </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.partner_id.street"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.partner_id.street2"></span>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>
+                                        <span t-field="o.partner_id.city"></span>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>
+                                        <span t-field="o.partner_id.country_id"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.partner_id.mobile"></span>
+                                        <span t-field="o.partner_id.email"></span>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+                            <br></br>
+
+                            <table class="table" width="100%">
+                                <thead style="background-color:#4682b4; color:white">
+                                    <tr style="border: 1px solid white">
+                                        <th width="70%" style="border: 1px solid white">Product</th>
+                                        <th width="20%" style="border: 1px solid white" class="text-center">Quantity Received
+                                        </th>
+                                        <th width="10%" style="border: 1px solid white" class="text-center">UOM</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody class="invoice_tbody" style="border-bottom-style: solid">
+                                    <!--                                    <t t-set="total_amount" t-value="0"/>-->
+                                    <tr t-foreach="o.pack_operation_product_ids" t-as="l">
+                                        <td style="border: 1px dotted #BEBEBE">
+                                            <span t-field="l.product_id.name"/>
+                                        </td>
+
+                                        <td style="border: 1px dotted #BEBEBE">
+                                            <span t-field="l.qty_done"/>
+                                        </td>
+
+
+                                        <td class="text-right" style="border: 1px dotted #BEBEBE">
+                                            <span t-field="l.product_uom_id"/>
+
+                                        </td>
+                                    </tr>
+
+
+                                 <!--   <tr style="border:1px solid black;">
+                                        <th style="border: 1px dotted #BEBEBE"></th>
+                                        <th style="border: 1px dotted #BEBEBE"></th>
+                                        <th style="border: 1px dotted #BEBEBE"></th>
+
+                                    </tr> -->
+                                </tbody>
+
+                            </table>
+                            <table style="font-size:10px;">
+                                <tr>
+                                    <td>Thank you for your delivery.
+                                    </td>
+									<td>We have received the above mentioned products.
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table style="font-size:10px;">
+                                <tr>
+                                    <td>It’s a pleasure to work with you on this project.
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Yours sincerely,</td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table style="font-size:10px;">
+                                <tr>
+                                    <td>
+                                        <span t-field="o.company_id.name"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+
+                            <table style="font-size:10px;">
+                                <tr>
+                                    <td>
+                                        <span t-field="o.company_id.street"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.company_id.street2"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span t-field="o.company_id.city"/>,
+                                        <span t-field="o.company_id.country_id"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.company_id.website"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.company_id.phone"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </t>
+            </t>
+            <!--            </t>-->
+        </template>
+
+
+    </data>
+</odoo>

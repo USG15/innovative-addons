@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="construction_report_invoice_document" inherit_id="account.report_invoice_document">
+    <xpath expr="//th[@class='hidden']" position="after">
+        <th>Project</th>
+        <th>Sub Work Order</th>
+    </xpath>
+    <xpath expr="//td[@class='hidden']" position="after">
+        <td>
+            <span t-field="l.project_id"/>
+        </td>
+        <td>
+            <span t-field="l.sub_work_order_id"/>
+        </td>
+    </xpath>
+
+    <xpath expr="//th[last()]" position="attributes">
+        <attribute name="class">hidden</attribute>
+    </xpath>
+
+    <xpath expr="//td[last()]" position="attributes">
+        <attribute name="class">hidden</attribute>
+    </xpath>
+
+    <xpath expr="//th[8]" position="replace">
+        <th class="text-right">Total Price</th>
+    </xpath>
+
+    <xpath expr="//td[8]" position="replace">
+        <td class="text-right">
+            <span t-field="l.price_subtotal" 
+                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+        </td>
+    </xpath>
+
+</template>
+
+</data>
+</odoo>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="print_service_wo_template_document">
+    <t t-call="report.external_layout">
+        <div class="page">
+            <h2>
+                <span>Serive WO- </span>
+                <span t-field="o.name"/>
+            </h2>
+
+            <div class="row mt32 mb32">
+                <div class="col-xs-6">
+                    <strong>Work Category:</strong>
+                    <span t-field="o.work_category_id"/>
+                </div>
+                <div class="col-xs-6">
+                    <strong>Approval Date:</strong>
+                    <span t-field="o.approval_date"/>
+                </div>
+            </div>
+
+            <div class="row mt32 mb32">
+                <div class="col-xs-6">
+                    <strong>Agreed Amount:</strong>
+                    <span t-field="o.agreed_amount"/>
+                </div>
+                <div class="col-xs-6">
+                    <strong>Total Progress Amount:</strong>
+                    <span t-field="o.total_progress_amount"/>
+                </div>
+            </div>
+
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Percentage</th>
+                        <th class="text-right">Amount</th>
+                        <th class="text-right">Done Percentage</th>
+                    </tr>
+                </thead>
+                <tbody class="invoice_tbody">
+                    <tr t-foreach="o.work_order_ids" t-as="l">
+                        <td><span t-field="l.name"/></td>
+                        <td>
+                            <span t-field="l.description"/>
+                        </td>
+                        <td>
+                            <span t-field="l.percentage"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="l.amount"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="l.done_percentage"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </t>
+</template>
+
+<template id="print_service_wo_template">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="eq_construction_mgt.print_service_wo_template_document"/>
+        </t>
+    </t>
+</template>
+
+</data>
+</odoo>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="inherit_view_hr_payslip_form" model="ir.ui.view">
+        <field name="name">hr.payslip.form.view</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='credit_note']" position="after">
+                <field name="emp_code" force_save="1" readonly="1"/>
+                <field name="per_day_cal" invisible="1"/>
+                <field name="month" required="1"/>
+                <field name="net_amount" invisible="0"/>
+                <field name="arrears" force_save="1" readonly="1" invisible="0"/>
+                <field name="remaining_amount" force_save="1" readonly="1" invisible="0"/>
+                <field name="normal_hours" force_save="1" readonly="1" invisible="0"/>
+                <field name="total_ot_hours" force_save="1" readonly="1" invisible="0"/>
+                <field name="weekly_schedule_hour" force_save="1"/>
+                <field name="weekly_days" force_save="1"/>
+                <field name="weekly_off_hour" force_save="1"/>
+                <field name="per_day_working_hour" force_save="1" readonly="1" invisible="0"/>
+                <field name="total_advance_salary" force_save="1" readonly="1"/>
+                <field name="advance_salary" attrs="{'readonly':[('state','!=','draft')]}" force_save="1"/>
+                <field name="payment_done" invisible="1"/>
+                <field name="payment_move_ids" widget="many2many_tags" invisible="1"/>
+                <field name="no_of_days" force_save="1" readonly="1" invisible="1"/>
+                <field name="total_hours" force_save="1" readonly="1" invisible="1"/>
+            </xpath>
+            <button name="%(hr_payroll.act_payslip_lines)d" position="after">
+                <button name="action_view_entries" class="oe_stat_button" icon="fa-university" type="object"
+                    string="Payment Matching" help="Payslip Payment Details"
+                    attrs="{'invisible': [('payment_done', '=', False)]}"/>
+            </button>
+        </field>
+    </record>
+
+    <record id="inherit_view_hr_payslip_tree" model="ir.ui.view">
+        <field name="name">hr.payslip.tree.view</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_tree"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="before">
+                <field name="emp_code"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="inherit_hr_contract_view_form" model="ir.ui.view">
+        <field name="name">hr.contract.form</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='information']//group[@name='salary_and_advantages']/field[@name='advantages']" position="before">
+                <field name="payment_journal_id" required="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherit_resource_calendar_attendance_tree" model="ir.ui.view">
+        <field name="name">resource.calendar.attendance.tree</field>
+        <field name="inherit_id" ref="resource.view_resource_calendar_attendance_tree"/>
+        <field name="model">resource.calendar.attendance</field>
+        <field name="arch" type="xml">
+            <field name="hour_to" position="after">
+                <field name="margin_time"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="inherit_employee_form_view" model="ir.ui.view">
+        <field name="name">hr.employee.form</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <field name="work_phone" position="after">
+                <field name="emp_code" readonly="1" force_save="1"/>
+                <field name="emp_code_no" invisible="1" force_save="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="inherit_res_company_form_view" model="ir.ui.view">
+        <field name="name">res.company.form</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="model">res.company</field>
+        <field name="arch" type="xml">
+            <field name="website" position="after">
+                <field name="code"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="inherit_view_department_form" model="ir.ui.view">
+        <field name="name">hr.department.form</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="model">hr.department</field>
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <field name="code"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="inherit_view_hr_job_form" model="ir.ui.view">
+        <field name="name">hr.job.form</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="model">hr.job</field>
+        <field name="arch" type="xml">
+            <field name="no_of_recruitment" position="after">
+                <field name="code"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="inherit_view_employee_tree" model="ir.ui.view">
+        <field name="name">hr.employee.tree</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="emp_code"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="inherit_view_hr_job_tree" model="ir.ui.view">
+        <field name="name">hr.job.tree</field>
+        <field name="inherit_id" ref="hr.view_hr_job_tree"/>
+        <field name="model">hr.job</field>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="code"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="inherit_view_department_tree" model="ir.ui.view">
+        <field name="name">hr.department.tree</field>
+        <field name="inherit_id" ref="hr.view_department_tree"/>
+        <field name="model">hr.department</field>
+        <field name="arch" type="xml">
+            <field name="display_name" position="after">
+                <field name="code"/>
+            </field>
+        </field>
+    </record>
+
+    <menuitem id="menu_hr_job_title" action="hr.action_hr_job" parent="hr.menu_hr_root" sequence="95"/>
+
+    <menuitem id="hr_payroll.menu_hr_payroll_global_settings" name="Settings" 
+            parent="hr_payroll.menu_hr_payroll_configuration" sequence="0"
+            action="hr_payroll.action_hr_payroll_configuration" groups="-base.group_no_one,hr_payroll.group_hr_payroll_manager"/>
+
+    <record id="inherit_view_hr_payroll_configuration" model="ir.ui.view">
+        <field name="name">hr.payroll.config.settings</field>
+        <field name="model">hr.payroll.config.settings</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payroll_configuration"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <field name="backdated_days"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherit_hr_payslip_run_form" model="ir.ui.view">
+        <field name="name">hr.payslip.run.tree</field>
+        <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+        <field name="model">hr.payslip.run</field>
+        <field name="arch" type="xml">
+            <field name="credit_note" position="after">
+                <field name="month" required="1"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

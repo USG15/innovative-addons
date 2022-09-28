@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_payslip_partial_payment,access_payslip_partial_payment,model_payslip_partial_payment,base.group_user,1,1,1,0
+access_payslip_partial_payment_line,access_payslip_partial_payment_line,model_payslip_partial_payment_line,base.group_user,1,1,1,0
+access_employee_adv_payment,access_employee_adv_payment,model_employee_adv_payment,base.group_user,1,1,1,0
+access_employee_payment_adjustment,access_employee_payment_adjustment,model_employee_adjustment_payment,base.group_user,1,1,1,0

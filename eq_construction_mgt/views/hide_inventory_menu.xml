@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem name="Register" id="menu_register" sequence="40"/>
+
+    <menuitem name="Register" id="sub_menu_register" sequence="1" parent="menu_register"/>
+
+    <menuitem id="register_vendor" name="Vendors" parent="sub_menu_register"
+            action="base.action_partner_supplier_form" sequence="1"/>
+
+    <menuitem id="project.menu_project_management" name="Search" parent="project.menu_main_pm"
+            sequence="2" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem action="project.action_view_task" id="project.menu_action_view_task" groups="eq_construction_mgt.group_show_extra_column" parent="project.menu_project_management" sequence="5"/>
+
+    <menuitem action="project.open_task_type_form" id="project.menu_project_config_project" name="Stages" parent="project.menu_project_config" sequence="3" groups="-project.group_project_manager,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem action="project.open_view_project_all" id="project.menu_projects" name="Dashboard" parent="project.menu_main_pm" sequence="1" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem action="project.project_tags_action" id="project.menu_project_tags_act" parent="project.menu_project_config" groups="-base.group_no_one,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="project.menu_project_report" name="Reports"
+            groups="eq_construction_mgt.group_show_extra_column"
+            parent="project.menu_main_pm" sequence="99"/>
+
+    <menuitem id="project.menu_project_report_task_analysis"
+            name="Tasks Analysis"
+            groups="eq_construction_mgt.group_show_extra_column"
+            action="project.action_project_task_user_tree"
+            parent="project.menu_project_report"
+            sequence="10"/>
+
+    <menuitem id="project.menu_project_general_settings" name="Settings" parent="project.menu_project_config"
+            sequence="0" action="project.action_config_settings" groups="-base.group_system,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="stock.menu_stock_warehouse_mgmt" name="Operations" parent="stock.menu_stock_root" sequence="2"
+        groups="eq_construction_mgt.group_show_extra_column,-stock.group_stock_manager"/>
+
+    <menuitem id="stock.menu_stock_inventory_control" name="Inventory Control" parent="stock.menu_stock_root" sequence="4"
+        groups="eq_construction_mgt.group_show_extra_column,-stock.group_stock_manager"/>
+
+    <menuitem id="stock.menu_stock_sched" name="Schedulers" parent="stock.menu_stock_root" groups="eq_construction_mgt.group_show_extra_column,-stock.group_stock_manager" sequence="50"/>
+
+    <menuitem action="procurement.procurement_order_action_exceptions" id="stock.menu_stock_procurement_action" parent="stock.menu_warehouse_report" sequence="150" groups="eq_construction_mgt.group_show_extra_column,-stock.group_stock_manager"/>
+
+    <menuitem id="stock.menu_stock_uom_form_action" action="product.product_uom_form_action" 
+        parent="stock.menu_stock_config_settings" sequence="35" groups="eq_construction_mgt.group_show_extra_column,-product.group_uom"/>
+
+    <menuitem id="stock.menu_product_in_config_stock" name="Products" parent="stock.menu_stock_config_settings" sequence="4"
+        groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="stock.menu_stock_general_settings" name="Settings" parent="stock.menu_stock_config_settings"
+            sequence="0" action="stock.action_stock_config_settings" groups="eq_construction_mgt.group_show_extra_column,-base.group_system"/>
+
+    <menuitem
+        action="product.product_category_action_form" id="stock.menu_product_category_config_stock"
+        name="Register Category" parent="sub_menu_register" sequence="4"/>
+
+    <menuitem id="stock.menu_product_variant_config_stock" name="Register Products" action="stock.product_template_action_product"
+        parent="sub_menu_register" sequence="3"/>
+
+    <!-- <menuitem action="purchase.purchase_rfq" id="purchase.menu_purchase_rfq" parent="purchase.menu_procurement_management"
+        sequence="0" groups="-eq_construction_mgt.group_show_extra_column"/> -->
+
+    <menuitem id="purchase.menu_purchase_config" name="Configuration" parent="purchase.menu_purchase_root" sequence="100" groups="eq_construction_mgt.group_show_extra_column,-purchase.group_purchase_manager"/>
+
+    <menuitem id="purchase.menu_product_in_config_purchase" name="Products" parent="purchase.menu_purchase_config" sequence="30" groups="eq_construction_mgt.group_show_extra_column,-base.group_no_one"/>
+
+    <menuitem id="purchase.menu_purchase_control" name="Control" parent="purchase.menu_purchase_root" sequence="4" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="purchase.product_product_menu" name="Product Variants" action="purchase.product_product_action"
+            parent="purchase.menu_procurement_management" sequence="21" groups="eq_construction_mgt.group_show_extra_column,-product.group_product_variant"/>
+
+    <menuitem name="Products" id="purchase.menu_procurement_partner_contact_form" action="purchase.product_normal_action_puchased"
+          parent="purchase.menu_procurement_management" sequence="20" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="stock_account.menu_action_wizard_valuation_history" action="stock_account.action_wizard_stock_valuation_history" parent="stock.menu_warehouse_report" sequence="1" groups="-base.group_no_one,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem parent="stock.menu_warehouse_report" action="stock.action_stock_line_date" id="stock.menu_report_stock_line_date" sequence="2"
+            groups="-base.group_no_one,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="stock.menu_warehouse_config" name="Warehouse Management" parent="stock.menu_stock_config_settings" groups="-stock.group_stock_manager,eq_construction_mgt.group_show_extra_column" sequence="1"/>
+
+    <menuitem id="stock.menu_wms_barcode_nomenclature_all" parent="stock.menu_stock_config_settings" action="barcodes.action_barcode_nomenclature_form" 
+        sequence="50" groups="-base.group_no_one,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="account.menu_finance_payables" name="Billings" parent="account.menu_finance" sequence="3"/>
+
+    <menuitem id="account.menu_account_supplier" name="Vendors"
+            parent="account.menu_finance_payables"
+            groups="eq_construction_mgt.group_show_extra_column"
+            action="base.action_partner_supplier_form" sequence="100"/>
+
+    <menuitem name="Purchasable Products" id="purchase.menu_product_normal_action_puchased" action="purchase.product_normal_action_puchased"
+          parent="account.menu_finance_payables" sequence="110" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem action="account.action_account_payments_payable" id="account.menu_action_account_payments_payable"
+        parent="account.menu_finance_payables" sequence="20" groups="-account.group_account_user,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="purchase.menu_procurement_management_pending_invoice"
+         action="purchase.action_invoice_pending"
+         parent="purchase.menu_procurement_management"
+         sequence="13"/>
+
+    <menuitem id="account.menu_action_manual_reconciliation" name="Manual Payments &amp; Invoices Matching" parent="account.menu_finance_entries"
+        action="account.action_manual_reconciliation" sequence="25" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem
+            name="Analytic Accounts"
+            parent="account.menu_finance_entries"
+            action="analytic.action_analytic_account_form"
+            id="account.menu_action_analytic_account_tree2"
+            sequence="30"
+            groups="-analytic.group_analytic_accounting,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem
+            name="Analytic Entries"
+            parent="account.menu_finance_entries"
+            action="analytic.account_analytic_line_action_entries"
+            id="account.menu_action_analytic_lines_tree"
+            sequence="35"
+            groups="-analytic.group_analytic_accounting,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem action="account.tax_adjustments_form" id="account.menu_action_tax_adjustment"
+        parent="account.menu_finance_entries" sequence="30" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="account.account_reports_business_intelligence_menu" name="Business Intelligence" parent="account.menu_finance_reports"
+        sequence="5" groups="-account.group_account_invoice,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="account.account_management_menu" name="Management" parent="account.menu_finance_configuration"
+        sequence="3" groups="-account.group_account_manager,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="account.menu_analytic_accounting" name="Analytic Accounting" parent="account.menu_finance_configuration"
+        groups="-analytic.group_analytic_accounting,eq_construction_mgt.group_show_extra_column" sequence="5"/>
+
+    <menuitem id="account.menu_config_multi_currency" name="Multi-Currencies" parent="account.menu_finance_configuration" sequence="9"
+        groups="-base.group_multi_currency,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem name='payment.Payments' id='payment.root_payment_menu'
+        parent='account.menu_finance_configuration' groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <record id="product.product_category_action_form" model="ir.actions.act_window">
+        <field name="name">Register Categories</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.category</field>
+        <field name="view_type">form</field>
+        <field name="search_view_id" ref="product.product_category_search_view"/>
+        <field name="view_id" ref="product.product_category_list_view"/>
+    </record>
+
+    <record id="stock.product_template_action_product" model="ir.actions.act_window">
+        <field name="name">Register Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_type">form</field>
+        <field name="context">{"search_default_consumable": 1, 'default_type': 'product'}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to define a new product.
+            </p>
+        </field>
+    </record>
+
+    <record id="good_receive_note_stock_picking_action" model="ir.actions.act_window">
+        <field name="name">Goods Receive Note</field>
+        <field name="res_model">stock.picking</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,kanban,form,calendar</field>
+        <field name="domain"></field>
+        <field name="context">{'set_picking_type':'incoming'}</field>
+        <field name="domain">[('picking_type_code','=','incoming')]</field>
+        <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click here to create a new Goods Receive Note.
+            </p><p>
+            You can either do it immediately or mark it as Todo for future processing. Use your scanner to validate the transferred quantity quicker.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_good_receive_note" name="Goods Receive Note" parent="stock.menu_stock_root" sequence="55" action="good_receive_note_stock_picking_action" groups="stock.group_stock_manager,stock.group_stock_user"/>
+
+    <record id="menu_good_issuance_note_stock_picking_action" model="ir.actions.act_window">
+        <field name="name">Goods Issuance Note</field>
+        <field name="res_model">stock.picking</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,kanban,form,calendar</field>
+        <field name="domain"></field>
+        <field name="context">{'set_picking_type':'outgoing'}</field>
+        <field name="domain">[('picking_type_code','=','outgoing')]</field>
+        <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click here to create a new Goods Issuance Note.
+            </p><p>
+            You can either do it immediately or mark it as Todo for future processing. Use your scanner to validate the transferred quantity quicker.
+            </p>
+        </field>
+    </record>
+
+    <record id="menu_good_issuance_note_stock_picking_action_tree" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="menu_good_issuance_note_stock_picking_action" />
+        <field name="view_id" ref="eq_construction_mgt.vpicktree_delivery" />
+        <field name="view_mode">tree</field>
+        <field name="sequence" eval="1"/>
+    </record>
+
+    <record id="menu_good_issuance_note_stock_picking_action_form" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="menu_good_issuance_note_stock_picking_action" />
+        <field name="view_id" ref="stock.view_picking_form" />
+        <field name="view_mode">form</field>
+        <field name="sequence" eval="2"/>
+    </record>
+
+    <record id="menu_good_issuance_note_stock_picking_action_kanban" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="menu_good_issuance_note_stock_picking_action" />
+        <field name="view_id" ref="stock.stock_picking_kanban" />
+        <field name="view_mode">kanban</field>
+        <field name="sequence" eval="3"/>
+    </record>
+
+    <menuitem id="menu_good_issuance_note" name="Goods Issuance Note" parent="stock.menu_stock_root" sequence="56" action="menu_good_issuance_note_stock_picking_action" groups="stock.group_stock_manager,stock.group_stock_user"/>
+
+    <record id="purchase.purchase_rfq" model="ir.actions.act_window">
+        <field name="name">Draft PO</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order</field>
+        <field name="context">{'search_default_todo':1}</field>
+        <field name="domain">[('state','in',('draft','sent','cancel', 'confirmed'))]</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+        <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to create a Draft PO.
+            </p><p>
+            The quotation contains the history of the discussion/negotiation
+            you had with your vendor. Once confirmed, a request for
+            quotation is converted into a purchase order.
+            </p><p>
+            Most propositions of purchase orders are created automatically
+            by Odoo based on inventory needs.
+            </p>
+        </field>
+    </record>
+
+    <record id="purchase.purchase_form_action" model="ir.actions.act_window">
+        <field name="name">Approved PO</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+        <field name="context">{'search_default_todo':1, 'show_purchase': True}</field>
+        <field name="domain">[('state','not in',('draft','sent', 'confirmed'))]</field>
+        <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to create a Draft PO that will be converted into a Approved PO. 
+            </p><p>
+            Use this menu to search within your purchase orders by
+            references, vendor, products, etc. For each purchase order,
+            you can track the related discussion with the vendor, control
+            the products received and control the vendor bills.
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="purchase.purchase_form_action" id="purchase.menu_purchase_form_action" parent="purchase.menu_procurement_management" sequence="6" name="Approved PO"/>
+
+    <menuitem action="purchase.purchase_rfq" id="purchase.menu_purchase_rfq" parent="purchase.menu_procurement_management" sequence="3" name="Draft PO"/>
+
+    <menuitem id="purchase.purchase_report" name="Reports" parent="purchase.menu_purchase_root" sequence="99"
+        groups="-purchase.group_purchase_manager,eq_construction_mgt.group_show_extra_column" action="purchase.action_purchase_order_report_all"/>
+
+    <menuitem id="purchase.menu_procurement_management_supplier_name" name="Vendors"
+            parent="purchase.menu_procurement_management"
+            groups="eq_construction_mgt.group_show_extra_column"
+            action="base.action_partner_supplier_form" sequence="15"/>
+
+    <menuitem
+         id="purchase.menu_procurement_management_pending_invoice"
+         action="purchase.action_invoice_pending"
+         parent="purchase.menu_purchase_control"
+         groups="eq_construction_mgt.group_show_extra_column"
+         sequence="13"/>
+
+    <record id="inherit_purchase_order_form_view" model="ir.ui.view">
+        <field name="name">purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- <xpath expr="//field[@name='order_line']/tree/field[@name='date_planned']" position="attributes">
+                <attribute name="groups">eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath> -->
+            <!-- <xpath expr="//field[@name='order_line']/tree/field[@name='company_id']" position="attributes">
+                <attribute name="groups">-base.group_multi_company,eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath> -->
+            <!-- <xpath expr="//field[@name='order_line']/tree/field[@name='account_analytic_id']" position="attributes">
+                <attribute name="groups">-purchase.group_analytic_accounting,eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath> -->
+            <!-- <xpath expr="//field[@name='order_line']/tree/field[@name='analytic_tag_ids']" position="attributes">
+                <attribute name="groups">-purchase.group_analytic_accounting,eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath> -->
+
+            <!-- <xpath expr="//field[@name='order_line']/form//field[@name='date_planned']" position="attributes">
+                <attribute name="groups">eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='company_id']" position="attributes">
+                <attribute name="groups">-base.group_multi_company,eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='account_analytic_id']" position="attributes">
+                <attribute name="groups">-purchase.group_analytic_accounting,eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath> -->
+
+            <xpath expr="//button[@name='action_rfq_send']" position="before">
+                <button name="open_multi_products_wiz" type="object" string="Add Multi Products" class="oe_highlight" states="draft"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_rfq_send']" position="attributes">
+                <attribute name="groups">eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_rfq_send'][last()]" position="attributes">
+                <attribute name="groups">eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_picking']" position="attributes">
+                <attribute name="groups">eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath>
+            <xpath expr="//button[@name='print_quotation']" position="attributes">
+                <attribute name="string">Print PO</attribute>
+            </xpath>
+
+            <!-- <xpath expr="//field[@name='order_line']/tree/field[@name='taxes_id']" position="attributes">
+                <attribute name="groups">eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='taxes_id']" position="attributes">
+                <attribute name="groups">eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_untaxed']" position="attributes">
+                <attribute name="string">Amount</attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_tax']" position="attributes">
+                <attribute name="groups">eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath> -->
+
+            <xpath expr="//notebook" position="replace">
+                <notebook>
+                <page string="Products">
+                    <field name="order_line" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}">
+                            <tree string="Purchase Order Lines" editable="bottom">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="state" invisible="1"/>
+                            <field name="sequence" widget="handle"/>
+                            <field name="product_id" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}" context="{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom, 'company_id': parent.company_id}"/>
+                            <field name="name"/>
+                            <field name="date_planned" groups="eq_construction_mgt.group_show_extra_column"/>
+                            <field name="company_id" groups="-base.group_multi_company,eq_construction_mgt.group_show_extra_column" options="{'no_create': True}"/>
+                            <field name="account_analytic_id" context="{'default_partner_id':parent.partner_id}" groups="-purchase.group_analytic_accounting,eq_construction_mgt.group_show_extra_column"/>
+                            <field name="analytic_tag_ids" groups="-purchase.group_analytic_accounting,eq_construction_mgt.group_show_extra_column" widget="many2many_tags"/>
+                            <field name="product_qty"/>
+                            <field name="qty_received" invisible="not context.get('show_purchase', False)"/>
+                            <field name="qty_invoiced" invisible="not context.get('show_purchase', False)"/>
+                            <field name="copy_product_uom" groups="product.group_uom" readonly="1" force_save="1"/>
+                            <field name="product_uom" groups="product.group_uom" invisible="1"/>
+                            <field name="price_unit"/>
+                            <field name="discount"/>
+                            <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}" groups="eq_construction_mgt.group_show_extra_column"/>
+                            <field name="price_subtotal" widget="monetary"/>
+                        </tree>
+                        <form string="Purchase Order Line">
+                            <sheet>
+                                <group>
+                                    <group>
+                                        <field name="product_id" context="{'partner_id': parent.partner_id}"/>
+                                        <label for="product_qty"/>
+                                        <div>
+                                            <field name="product_qty" class="oe_inline"/>
+                                            <span class="oe_inline"> </span>
+                                            <field name="copy_product_uom" groups="product.group_uom" class="oe_inline" readonly="1" force_save="1"/>
+                                            <field name="product_uom"  groups="product.group_uom" invisible="1" class="oe_inline"/>
+                                        </div>
+                                        <field name="price_unit"/>
+                                        <field name="discount"/>
+                                    </group>
+                                    <group>
+                                        <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase')]" groups="eq_construction_mgt.group_show_extra_column"/>
+                                        <field name="date_planned" widget="date" groups="eq_construction_mgt.group_show_extra_column"/>
+                                        <field name="account_analytic_id" colspan="2" groups="-purchase.group_analytic_accounting,eq_construction_mgt.group_show_extra_column"/>
+                                        <field name="company_id" groups="-base.group_multi_company,eq_construction_mgt.group_show_extra_column" options="{'no_create': True}"/>
+                                    </group>
+                                </group>
+                                <notebook>
+                                <page string="Notes">
+                                    <field name="name"/>
+                                </page><page string="Invoices and Incoming Shipments">
+                                    <field name="invoice_lines"/>
+                                    <field name="move_ids"/>
+                                </page>
+                                </notebook>
+                            </sheet>
+                        </form>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="amount_untaxed" string="Amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}" groups="eq_construction_mgt.group_show_extra_column"/>
+                        <div class="oe_subtotal_footer_separator oe_inline">
+                            <label for="amount_total"/>
+                        </div>
+                        <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    </group>
+                    <field name="notes" class="oe_inline" placeholder="An administrator can set up default Terms and conditions in your Company settings."/>
+                    <div class="oe_clear"/>
+                </page>
+                <page string="Deliveries &amp; Invoices" groups="eq_construction_mgt.group_show_extra_column">
+                    <group>
+                        <group>
+                            <label for="date_planned"/>
+                            <div>
+                                <field name="date_planned" required="1" attrs="{'readonly': [('state', 'not in', ('draft', 'sent'))]}"/>
+                                <button name="action_set_date_planned" type="object" states="draft,sent" string="Set date to all order lines" help="This changes the scheduled date of all order lines to the given date" class="fa fa-calendar o_icon_button oe_edit_only"/>
+                            </div>
+                            <field name="picking_type_id" domain="[('code','=','incoming')]" options="{'no_create': True}" groups="stock.group_stock_multi_locations"/>
+                            <field name="dest_address_id" groups="stock.group_stock_multi_locations" attrs="{'invisible': [('default_location_dest_id_usage', '!=', 'customer')], 'required': [('default_location_dest_id_usage', '=', 'customer')]}"/>
+                            <field name="default_location_dest_id_usage" invisible="1"/>
+                            <field name="incoterm_id"/>
+                        </group>
+                        <group>
+                            <field name="invoice_status"/>
+                            <field name="payment_term_id" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>
+                            <field name="fiscal_position_id" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>
+                            <field name="date_approve" groups="base.group_no_one"/>
+                        </group>
+                    </group>
+                </page>
+                </notebook>
+            </xpath>
+
+            <xpath expr="//sheet//div[@class='oe_title']" position="replace">
+                <div class="oe_title">
+                    <label string="Draft PO " attrs="{'invisible': [('state','not in',('draft','sent'))]}"/>
+                    <label string="Approved PO " attrs="{'invisible': [('state','in',('draft','sent'))]}"/>
+                    <h1>
+                        <field name="name" readonly="1"/>
+                    </h1>
+                </div>
+            </xpath>
+
+
+
+
+        </field>
+    </record>
+
+     <record id="inherit_purchase_order_tree_view" model="ir.ui.view">
+        <field name="name">purchase.order.tree</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount_untaxed']" position="attributes">
+                <attribute name="string">Amount</attribute>
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="attributes">
+                <attribute name="groups">eq_construction_mgt.group_show_extra_column</attribute>
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherit_view_purchase_order_filter" model="ir.ui.view">
+        <field name="name">purchase.order.search</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='to_approve']" position="after">
+                <filter string="Today" domain="[('date_order','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59))), ('date_order','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]" help="Orders processed Today or planned for Today"/>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="account.menu_finance_receivables" name="Sales" parent="account.menu_finance"
+        sequence="2" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="sales_team.menu_sales" name="Registration" parent="sales_team.menu_base_partner"
+        sequence="5"/>
+    
+    <menuitem id="sales_team.menu_partner_form" parent="sub_menu_register" action="base.action_partner_form"
+        sequence="2" groups="-eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="sale.menu_sale_quotations" parent="sales_team.menu_sales" action="sale.action_quotations"
+        sequence="11" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="sale.menu_sale_order" parent="sales_team.menu_sales" action="sale.action_orders"
+        sequence="12" groups="-sales_team.group_sale_salesman,-sales_team.group_sale_manager,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="sale.menu_product_template_action" parent="sales_team.menu_sales" action="product.product_template_action"
+        sequence="13" groups="eq_construction_mgt.group_show_extra_column"/>
+    
+    <menuitem id="sale.menu_product" name="Product Variants" parent="sales_team.menu_base_partner"
+        sequence="9" groups="-product.group_product_variant,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="sale.menu_products" action="product.product_normal_action_sell" parent="sales_team.menu_sales"
+        groups="-product.group_product_variant,eq_construction_mgt.group_show_extra_column" sequence="99"/>
+
+    <menuitem name="Invoicing" id="sale.menu_sale_invoicing" parent="sales_team.menu_base_partner"
+        sequence="5" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem action="sale.action_orders_to_invoice" id="sale.menu_sale_order_invoice" parent="sale.menu_sale_invoicing"
+        sequence="2" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem action="sale.action_orders_upselling" id="sale.menu_sale_order_upselling" parent="sale.menu_sale_invoicing"
+        sequence="5" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem id="sales_team.menu_sale_report" name="Reports" parent="sales_team.menu_base_partner" sequence="99"
+        groups="-sales_team.group_sale_manager,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem name="Sales Teams" id="sales_team.sales_team_config" parent="sales_team.menu_sale_config"
+        action="sales_team.sales_team_config_action" groups="eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem action="product.product_category_action_form" groups="-base.group_no_one,eq_construction_mgt.group_show_extra_column"
+        id="sale.menu_product_category_action_form" parent="sale.prod_config_main" sequence="2"/>
+
+    <menuitem action="product.attribute_action" id="sale.menu_attribute_action" parent="sale.prod_config_main" sequence="4"
+        groups="-product.group_product_variant,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem action="product.variants_action" id="sale.menu_variants_action" parent="sale.prod_config_main"
+        sequence="5" groups="-product.group_product_variant,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem action="product.product_uom_categ_form_action" id="sale.menu_product_uom_categ_form_action"
+        parent="sale.prod_config_main" sequence="7" groups="-base.group_no_one,eq_construction_mgt.group_show_extra_column"/>
+
+    <menuitem action="product.product_uom_form_action" id="sale.menu_product_uom_form_action"
+        parent="sub_menu_register" sequence="6" groups="product.group_uom"/>
+
+</odoo>

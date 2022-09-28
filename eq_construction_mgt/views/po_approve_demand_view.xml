@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="po_approve_demand_form_view" model="ir.ui.view">
+        <field name="name">po.approve.demand.form</field>
+        <field name="model">po.approve.demand</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="open_multi_products_wiz" type="object" string="Add Multi Products" class="oe_highlight" states="draft"/>
+                    <button name="do_confirm" groups="eq_construction_mgt.group_po_demand_user" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+                    <button name="do_approval" groups="eq_construction_mgt.group_po_demand_manager" class="oe_highlight" states="confirm" string="Approval" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1" class="oe_inline" attrs="{'invisible': [('state','in',('draft'))]}"/>
+                    </h1>
+                    <group col="4">
+                        <field name="origin" attrs="{'readonly':[('readonly_field_by_user','=',True)]}"/>
+                        <field name="approval_date" readonly="1"/>
+                        <field name="create_uid" readonly="1"/>
+                        <field name="format_type" widget="radio" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="purchase_order_ids" widget="many2many_tags" readonly="1" force_save="1" invisible="1"/>
+                        <field name="readonly_field_by_user" invisible="1"/>
+                        <field name="demand_approved" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page name="po_approve_demand_lines" string="Demand Lines" attrs="{'invisible':[('format_type','=','1')]}">
+                            <field name="po_approve_demand_lines" attrs="{'readonly':[('readonly_field_by_user','=',True)]}">
+                                <tree editable="bottom">
+                                    <field name="product_id" required="1" domain="[('purchase_ok','=',1)]"/>
+                                    <field name="uom_id" required="1" force_save="1" readonly="1"/>
+                                    <field name="qty" required="1"/>
+                                    <field name="length" required="1"/>
+                                    <field name="width" required="1"/>
+                                    <field name="unit" required="1"/>
+                                    <field name="total_unit" invisible="1" required="1" sum="Total Unit"/>
+                                    <field name="po_approve_demand_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="format_type" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                            <div>
+                                <field name="comment" placeholder="Additional notes..." attrs="{'readonly':[('readonly_field_by_user','=',True)]}"/>
+                            </div>
+                        </page>
+
+                        <page name="po_approve_demand_linesnew" string="Demand Lines" attrs="{'invisible':[('format_type','=','0')]}">
+                            <field name="po_approve_demand_lines_new" attrs="{'readonly':[('readonly_field_by_user','=',True)]}">
+                                <tree editable="bottom">
+                                    <field name="product_id" required="1" domain="[('purchase_ok','=',1)]"/>
+                                    <field name="uom_id" required="1" force_save="1" readonly="1"/>
+                                    <field name="qty" required="1"/>
+                                    <field name="unit_new" required="1" invisible="1"/>
+                                    <field name="total_unit" required="1" invisible="1" sum="Total Unit"/>
+                                    <field name="po_approve_demand_new_id" invisible="1"/>
+                                    <field name="state_new" invisible="1"/>
+                                    <field name="format_type_new" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                            <div>
+                                <field name="comment" placeholder="Additional notes..." attrs="{'readonly':[('readonly_field_by_user','=',True)]}"/>
+                            </div>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="po_approve_demand_tree_view" model="ir.ui.view">
+        <field name="name">po.approve.demand.tree</field>
+        <field name="model">po.approve.demand</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="origin"/>
+                <field name="approval_date"/>
+                <field name="create_uid"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="po_approve_demand_rate_addition_form_view" model="ir.ui.view">
+        <field name="name">po.approve.demand.form</field>
+        <field name="model">po.approve.demand</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="1">
+                <header>
+                    <button name="do_finished" groups="eq_construction_mgt.group_po_demand_manager" class="oe_highlight" states="approved" string="Finish" type="object"/>
+                    <button name="open_generate_po_wizard" groups="eq_construction_mgt.group_po_demand_manager" class="oe_highlight" states="finished" string="Create PO" type="object" invisible="1"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1" class="oe_inline" attrs="{'invisible': [('state','in',('draft'))]}"/>
+                    </h1>
+                    <group col="4">
+                        <field name="origin" attrs="{'readonly':[('readonly_field_by_user','=',True)]}"/>
+                        <field name="approval_date" readonly="1"/>
+                        <field name="create_uid" readonly="1"/>
+                        <field name="format_type" widget="radio" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="purchase_order_ids" widget="many2many_tags" readonly="1" force_save="1" invisible="1"/>
+                        <field name="readonly_field_by_user" invisible="1"/>
+                        <field name="demand_approved" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page name="po_approve_demand_lines" string="Demand Lines" attrs="{'invisible':[('format_type','=','1')]}">
+                            <field name="po_approve_demand_lines" attrs="{'readonly':[('readonly_field_by_user','=',True)]}">
+                                <tree editable="bottom" create="0">
+                                    <field name="product_id" required="1" domain="[('purchase_ok','=',1)]"/>
+                                    <field name="uom_id" required="1" force_save="1" readonly="1"/>
+                                    <field name="qty" required="1"/>
+                                    <field name="length" required="1"/>
+                                    <field name="width" required="1"/>
+                                    <field name="unit"/>
+                                    <field name="total_unit" required="1" sum="Total Unit"/>
+                                    <field name="expected_rate" required="1" attrs="{'readonly':[('state','in',('draft','finished'))]}" groups="eq_construction_mgt.group_po_demand_manager"/>
+                                    <field name="total_amount" sum="Total Amount" groups="eq_construction_mgt.group_po_demand_manager"/>
+                                    <field name="po_approve_demand_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="format_type" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                            <div>
+                                <field name="comment" placeholder="Additional notes..." attrs="{'readonly':[('readonly_field_by_user','=',True)]}"/>
+                            </div>
+                        </page>
+
+                        <page name="po_approve_demand_linesnew" string="Demand Lines" attrs="{'invisible':[('format_type','=','0')]}">
+                            <field name="po_approve_demand_lines_new" attrs="{'readonly':[('readonly_field_by_user','=',True)]}">
+                                <tree editable="bottom" create="0">
+                                    <field name="product_id" required="1" domain="[('purchase_ok','=',1)]"/>
+                                    <field name="uom_id" required="1" force_save="1" readonly="1"/>
+                                    <field name="qty" required="1"/>
+                                    <field name="unit_new" required="0" invisible="1"/>
+                                    <field name="total_unit" required="1" sum="Total Unit" invisible="1"/>
+                                    <field name="expected_rate" attrs="{'readonly':[('state_new','in',('draft','finished'))]}" required="1" groups="eq_construction_mgt.group_po_demand_manager"/>
+                                    <field name="total_amount" sum="Total Amount" groups="eq_construction_mgt.group_po_demand_manager"/>
+                                    <field name="po_approve_demand_new_id" invisible="1"/>
+                                    <field name="state_new" invisible="1"/>
+                                    <field name="format_type_new" invisible="1"/>
+                                </tree>
+                            </field>
+                            <div>
+                                <field name="comment" placeholder="Additional notes..." attrs="{'readonly':[('readonly_field_by_user','=',True)]}"/>
+                            </div>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="po_approve_demand_rate_addition_tree_view" model="ir.ui.view">
+        <field name="name">po.approve.demand.tree</field>
+        <field name="model">po.approve.demand</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0">
+                <field name="name"/>
+                <field name="origin"/>
+                <field name="approval_date"/>
+                <field name="create_uid"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="po_approve_demand_search_view" model="ir.ui.view">
+        <field name="name">po.approve.demand.search</field>
+        <field name="model">po.approve.demand</field>
+        <field name="arch" type="xml">
+            <search string="Work Category">
+                <field name="name"/>
+                <field name="origin"/>
+                <group expand="0" string="Group By">
+                    <filter string="With L/W" domain="[('format_type','=','0')]" name="with_l_W"/>
+                    <filter string="Without L/W" domain="[('format_type','=','1')]" name="without_l_W"/>
+                    <filter string="Today" name="today" domain="[('approval_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="State" context="{'group_by':'state'}" name="without_l_W"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_po_approve_demand" model="ir.actions.act_window">
+        <field name="name">Quotation</field>
+        <field name="res_model">po.approve.demand</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('demand_approved','=',False)]</field>
+    </record>
+
+    <record id="action_po_approve_demand_tree" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_po_approve_demand" />
+        <field name="view_id" ref="po_approve_demand_tree_view" />
+        <field name="view_mode">tree</field>
+        <field name="sequence" eval="1"/>
+    </record>
+
+    <record id="action_po_approve_demand_form" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_po_approve_demand" />
+        <field name="view_id" ref="po_approve_demand_form_view" />
+        <field name="view_mode">form</field>
+        <field name="sequence" eval="2"/>
+    </record>
+
+    <menuitem action="action_po_approve_demand" id="menu_po_approve_demand"
+        parent="purchase.menu_procurement_management" sequence="0"/>
+
+    
+    <record id="action_po_approve_rate_addition" model="ir.actions.act_window">
+        <field name="name">Quotation With Price</field>
+        <field name="res_model">po.approve.demand</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('demand_approved','=',True)]</field>
+    </record>
+
+    <record id="action_po_approve_demand_tree" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_po_approve_rate_addition" />
+        <field name="view_id" ref="po_approve_demand_rate_addition_tree_view" />
+        <field name="view_mode">tree</field>
+        <field name="sequence" eval="1"/>
+    </record>
+
+    <record id="action_po_approve_demand_form" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_po_approve_rate_addition" />
+        <field name="view_id" ref="po_approve_demand_rate_addition_form_view" />
+        <field name="view_mode">form</field>
+        <field name="sequence" eval="2"/>
+    </record>
+
+    <menuitem action="action_po_approve_rate_addition" id="menu_po_approve_rate_addition"
+        parent="purchase.menu_procurement_management" sequence="2"/>
+
+    <record id="wizard_po_approve_demand_form_view" model="ir.ui.view">
+        <field name="name">wizard.po.approve.demand.form</field>
+        <field name="model">wizard.po.approve.demand</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="po_approve_demand_id" invisible="1"/>
+                    <group col="4">
+                        <field name="vendor_id" domain="[('supplier','=',1)]" required="1"/>
+                        <field name="select_type" widget="radio" class="oe_edit_only" options="{'horizontal': true}"/>
+                    </group>
+                    <group colspan="4">
+                        <separator string="Choose Demand Lines" colspan="4"/>
+                        <newline/>
+                        <field name="po_approve_demand_lines" nolabel="1">
+                            <tree editable="bottom" create="0">
+                                <field name="select" />
+                                <field name="product_id" required="1"/>
+                                <field name="uom_id" required="1"/>
+                                <field name="qty" required="1"/>
+                                <field name="total_unit" invisible="1"/>
+                                <field name="total_amount" invisible="1"/>
+                                <field name="expected_rate" invisible="1"/>
+                                <field name="wizard_po_approve_demand_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="generate_po" class="oe_highlight" string="Generate PO" type="object"/>
+                    or
+                    <button class="oe_highlight" special="cancel" string="Cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="po_demand_multi_product_selection_form_view" model="ir.ui.view">
+        <field name="name">po.demand.multi.product.selection.form</field>
+        <field name="model">po.demand.multi.product.selection</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="po_approve_demand_id" invisible="1"/>
+                <field name="product_ids" domain="[('purchase_ok','=',1),('type','!=','service')]"/>
+                <footer>
+                    <button name="do_confirm" class="oe_highlight" string="Confirm" type="object"/>
+                    or
+                    <button class="oe_highlight" special="cancel" string="Cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="po_draft_multi_product_selection_form_view" model="ir.ui.view">
+        <field name="name">po.draft.product.selection.form</field>
+        <field name="model">po.draft.multi.product.selection</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="draft_po_id" invisible="1"/>
+                <field name="product_ids" domain="[('purchase_ok','=',1),('type','!=','service')]"/>
+                <footer>
+                    <button name="do_confirm" class="oe_highlight" string="Confirm" type="object"/>
+                    or
+                    <button class="oe_highlight" special="cancel" string="Cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

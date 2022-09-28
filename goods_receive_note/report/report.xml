@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <!-- QWeb Reports -->
+        <!-- NAME & FILE_NAME should be the same -->
+                <report
+                    id="goods_receive_note_id"
+                    model="stock.picking"
+                    report_type="qweb-pdf"
+                    string="Good Receive Note "
+                    name="goods_receive_note.goods_receive_note_idss"
+                    file="goods_receive_note.goods_receive_note_idss"
+                />
+    </data>
+</odoo>

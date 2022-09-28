@@ -1,0 +1,26 @@
+/* line 4, ../sass/screen.scss */
+.openerp .mce-tinymce .mce-menubtn button {
+  color: #4D4D4D;
+}
+/* line 7, ../sass/screen.scss */
+.openerp .mce-tinymce.mce-fullscreen {
+  z-index: 1001;
+}
+/* line 10, ../sass/screen.scss */
+.openerp .mce-tinymce .mce-colorbutton .mce-preview {
+  margin-left: -8px;
+}
+
+/* line 16, ../sass/screen.scss */
+.mce-window {
+  max-height: 400px;
+}
+/* line 18, ../sass/screen.scss */
+.mce-window textarea {
+  max-height: 270px;
+}
+
+/* line 23, ../sass/screen.scss */
+.mce-window-body {
+  max-height: 350px;
+}

@@ -1,0 +1,235 @@
+<odoo>
+    <data>
+        <template id="vendor_bill_report_ids">
+            <t t-call="report.html_container">
+                <!--                <t t-call="report.external_layout">-->
+                <t t-foreach="docs" t-as="o">
+                    <div t-attf-class="article o_report_layout_standard o_company_#{o.id}_layout"
+                         t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+                         t-att-data-oe-lang="o and o.env.context.get('lang')">
+                        <t t-call="vendor_bill_report.vendor_bill_report_header_ids"/>
+                        <div class="page" style="margin-top:-30px;">
+
+                            <table style="font-size:10px;">
+                                <tr>
+                                    <td>Date:
+                                        <span t-field="o.date_invoice"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table width="100%" style="font-size:10px;">
+                                <tr>
+                                    <td width="60%">
+                                        <strong>Purchase Order:</strong>
+                                        <span t-field="o.number"/>
+                                    </td>
+                                    <!--                                <td width="40%"> </td>-->
+                                    <td style="text-right" width="20%">
+                                    </td>
+
+                                    <td style="text-right" width="20%">
+                                        <b>
+                                            <strong>Vendor Bill:</strong>
+                                            <span t-field="o.number"/>
+                                        </b>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                        <table width="100%" style="font-size:15px;">
+                                <tr>
+                                    <td>
+                                        <b>Date:</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.date_invoice"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table width="100%" style="font-size:10px;">
+                                <tr>
+                                    <td>
+                                        <b>Vendor:</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.partner_id.name"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Name and Details as registered</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.partner_id.street"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.partner_id.street2"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.partner_id.phone"></span>
+                                        <span t-field="o.partner_id.email"></span>
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <br/>
+
+                            <table class="table" width="100%">
+                                <thead style="background-color:#4682b4; color:white">
+                                    <tr style="border: 1px solid white">
+                                        <th width="20%" style="border: 1px solid white">Product</th>
+                                        <!--     <th width="12%" style="border: 1px solid white">Project</th>
+                                        <th width="15%" style="border: 1px solid white">Sub Work Order</th> -->
+                                        <th width="10%" style="border: 1px solid white">QTY</th>
+                                        <th width="7%" style="border: 1px solid white">UOM</th>
+                                        <th width="10%" style="border: 1px solid white" class="text-center">Unit Price
+                                        </th>
+                                        <th width="15%" style="border: 1px solid white" class="text-center">Discount %
+                                        </th>
+                                        <th width="15%" style="border: 1px solid white" class="text-center">Total
+                                            Price
+                                        </th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody class="invoice_tbody" style="border-bottom-style: solid">
+                                    <t t-set="total_amount" t-value="0"/>
+                                    <tr t-foreach="o.invoice_line_ids" t-as="l">
+                                        <td style="border: 1px dotted #BEBEBE">
+                                            <span t-field="l.product_id.name"/>
+                                        </td>
+
+                                       <!--      <td style="border: 1px dotted #BEBEBE">
+                                          <span t-field="l.project_id.name"/>
+                                        </td>
+
+                                        <td style="border: 1px dotted #BEBEBE">
+                                          <span t-field="l.sub_work_order_id"/>
+                                        </td> -->
+
+                                        <td class="text-right" style="border: 1px dotted #BEBEBE">
+                                            <span t-field="l.quantity"/>
+
+                                        </td>
+
+                                        <td class="text-right" style="border: 1px dotted #BEBEBE">
+                                            <span t-field="l.uom_id"/>
+                                        </td>
+                                        <td class="text-right" style="border: 1px dotted #BEBEBE">
+                                            <span t-field="l.price_unit"/>
+                                        </td>
+                                        <td class="text-right" style="border: 1px dotted #BEBEBE">
+                                            <span t-field="l.discount"/>
+                                        </td>
+                                        <td class="text-right" style="border: 1px dotted #BEBEBE">
+                                            <span t-field="l.price_subtotal"/>
+                                        </td>
+                                        <t t-set="total_amount" t-value="l.price_subtotal + total_amount"/>
+                                    </tr>
+                                    <tr style="border:1px solid black;">
+                                        <th style="border: 1px dotted #BEBEBE"></th>
+                                      <!--       <th style="border: 1px dotted #BEBEBE"></th>
+                                        <th style="border: 1px dotted #BEBEBE"></th> -->
+                                        <th style="border: 1px dotted #BEBEBE"></th>
+                                        <th style="border: 1px dotted #BEBEBE"></th>
+                                        <th style="border: 1px dotted #BEBEBE"></th>
+                                        <th class="text-right" style="border: 1px dotted #BEBEBE;font-size:12px;">
+                                           <strong> Total Amount</strong>
+                                        </th>
+                                        <th style="border: 1px dotted #BEBEBE" class="text-right">
+                                            <span t-esc="total_amount" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                        </th>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+
+                            <table style="font-size:10px;">
+                                <tr>
+                                    <td>Thank you!
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table style="font-size:10px;">
+                                <tr>
+                                    <td>It’s a pleasure to work with you on this project.
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table style="font-size:10px;">
+                                <tr>
+                                    <td>Yours sincerely,
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+
+                            <table style="font-size:10px;">
+                                <tr>
+                                    <td>
+                                        <span t-field="o.company_id.name"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table style="font-size:10px;">
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            <table style="font-size:10px;">
+                                <tr>
+                                    <td>
+                                        <span t-field="o.company_id.street"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.company_id.street2"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span t-field="o.company_id.city"/>,
+                                        <span t-field="o.company_id.country_id"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.company_id.website"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.company_id.phone"/>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+
+
+                        </div>
+                    </div>
+                </t>
+            </t>
+            <!--            </t>-->
+        </template>
+
+
+    </data>
+</odoo>

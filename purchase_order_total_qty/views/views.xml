@@ -1,0 +1,23 @@
+<odoo>
+  <data>
+   
+   <record id="purchase_order_form_inherit2" model="ir.ui.view">
+        <field name="name">purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+             <xpath expr="//page[@name='products']/field/tree/field[@name='product_qty']" position="attributes">
+                 <attribute name="sum">product qty</attribute>
+            </xpath>
+            <xpath expr="//page[@name='products']/field/tree/field[@name='qty_received']" position="attributes">
+                 <attribute name="sum">qty received</attribute>
+            </xpath>
+            <xpath expr="//page[@name='products']/field/tree/field[@name='qty_invoiced']" position="attributes">
+                 <attribute name="sum">qty invoiced</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+  </data>
+</odoo>

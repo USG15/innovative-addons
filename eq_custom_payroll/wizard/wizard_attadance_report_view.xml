@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wizard_attadance_report_form_view" model="ir.ui.view">
+        <field name="name">wizard.attadance.report.form</field>
+        <field name="model">wizard.attadance.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <group invisible="1">
+                    <field name="state"/>
+                    <field name="name"/>
+                </group>
+                <group states="choose" col="4">
+                    <field name="start_date" required="1"/>
+                    <field name="end_date" required="1"/>
+                </group>
+                <group states="choose">
+                    <field name="company_id" required="1" groups="base.group_multi_company" options="{'no_create':True}"/>
+                    <field name="employee_ids" widget="many2many_tags" options="{'no_create':True}"/>
+                </group>
+                <group>
+                    <field name="xls_file" readonly="1" filename="name" states="download"/>
+                </group>
+                <footer>
+                    <button name="print_report_xls" string="Print Excel"
+                        type="object" class="oe_highlight" states="choose"/>
+                    <button name="action_go_back" string="Back"
+                        type="object" class="oe_highlight" states="download"/>
+                    or
+                    <button string="Close" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_attadance_report" model="ir.actions.act_window">
+        <field name="name">Attendance Report</field>
+        <field name="res_model">wizard.attadance.report</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="wizard_attadance_report_form_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_action_wizard_attadance_report" name="Attendance Reports" parent="hr_attendance.menu_hr_attendance_root" sequence="35" action="action_wizard_attadance_report"/>
+
+</odoo>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="hr_rule_basic" model="hr.salary.rule">
+            <field name="name">Basic Salary</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">BASIC</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+if payslip.weekly_schedule_hour:
+	result = (contract.wage / ((payslip.weekly_schedule_hour * payslip.per_day_cal) + payslip.weekly_off_hour) * payslip.normal_hours)
+else:
+    result = contract.wage
+            </field>
+        </record>
+
+        <record id="hr_rule_ot_hour_cal" model="hr.salary.rule">
+            <field name="name">OT Hours</field>
+            <field name="sequence" eval="81" />
+            <field name="code">OTHRS</field>
+            <field name="category_id" ref="hr_payroll.ALW" />
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+if payslip.weekly_days and payslip.weekly_schedule_hour and payslip.total_ot_hours:
+	result = (contract.wage / ((payslip.weekly_schedule_hour * 52.143)
+		+ payslip.per_day_working_hour * 52.143 * (7-payslip.weekly_days))) * (payslip.total_ot_hours * 1.5)
+else:
+	result = 0.00
+            </field>
+        </record>
+
+        <record id="hr_rule_adv_salary_cal" model="hr.salary.rule">
+            <field name="name">Advance Salary</field>
+            <field name="sequence" eval="85" />
+            <field name="code">ADVSAL</field>
+            <field name="category_id" ref="hr_payroll.DED" />
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = -payslip.advance_salary
+            </field>
+        </record>
+
+    </data>
+
+    <data noupdate="1">
+    
+        <record id="seq_adv_payment" model="ir.sequence">
+            <field name="name">Advance Payment</field>
+            <field name="code">employee.adv.payment</field>
+            <field name="prefix">ADV/SAL/</field>
+            <field name="padding">3</field>
+        </record>
+    </data>
+
+    <data noupdate="1">
+        <record id="seq_emp_code" model="ir.sequence">
+            <field name="name">Employee Code</field>
+            <field name="code">hr.employee.code</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+
+    <data noupdate="1">
+        <record id="seq_emp_adjustment_payment" model="ir.sequence">
+            <field name="name">Employee Adjustment Payment</field>
+            <field name="code">employee.adjustment.payment</field>
+            <field name="prefix">ADJ/</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+
+</odoo>
+
+

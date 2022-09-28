@@ -1,0 +1,5 @@
+/.idea/
+/.settings/
+/.sass-logs/
+/static/styles/.sass-cache/
+*.pyc

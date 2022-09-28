@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu items hierachy -->
+    <menuitem
+            id="pdf_report_creator_menu"
+            name="Easy PDF creator"
+            action="action_pdf_template_generator"
+            parent="report.reporting_menuitem"
+            sequence="7"/>
+</odoo>

@@ -1,0 +1,7 @@
+@charset "utf-8";
+div.html_editor_a4 {
+    width: 210mm !important;
+    min-height: 300mm !important;
+    padding: 20mm !important;
+    margin: 0 auto;
+}

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- <menuitem id="project.menu_project_config" name="Register" parent="sub_menu_register"
+            sequence="20" groups="project.group_project_manager"/> -->
+
+    <menuitem action="project.open_view_project_all_config" id="project.menu_projects_config" name="Projects" parent="sub_menu_register" sequence="10"/>
+
+    <record id="work_category_form_view" model="ir.ui.view">
+        <field name="name">work.category.form</field>
+        <field name="model">work.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" required="1"/>
+                        <field name="is_finished_wo" required="1"/>
+                    </group>
+                    <notebook>
+                        <page name="sub_work_category" string="Sub Work Category">
+                            <field name="sub_work_category_ids" context="{'default_is_finished_wo':is_finished_wo}">
+                                <tree editable="bottom">
+                                    <field name="name" required="1"/>
+                                    <field name="description" required="1"/>
+                                    <field name="is_finished_wo" invisible="1"/>
+                                    <field name="work_category_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="work_category_tree_view" model="ir.ui.view">
+        <field name="name">work.category.tree</field>
+        <field name="model">work.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="is_finished_wo"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="construction_work_category_search_view" model="ir.ui.view">
+        <field name="name">work.category.search</field>
+        <field name="model">work.category</field>
+        <field name="arch" type="xml">
+            <search string="Work Category">
+                <field name="name"/>
+                <group expand="0" string="Group By">
+                    <filter string="Service Category" domain="[('is_finished_wo','!=',True)]" name="service_work_category"/>
+                    <filter string="Finished Category" domain="[('is_finished_wo','=',True)]" name="finished_work_category"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_work_category" model="ir.actions.act_window">
+        <field name="name">Work Category</field>
+        <field name="res_model">work.category</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_work_category" id="menu_work_category"
+        parent="sub_menu_register" sequence="50"/>
+
+    <record id="sub_work_category_form_view" model="ir.ui.view">
+        <field name="name">sub.work.category.form</field>
+        <field name="model">sub.work.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="is_finished_wo" required="1"/>
+                        <field name="name" required="1"/>
+                        <field name="description" required="1"/>
+                        <field name="work_category_id" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sub_work_category_tree_view" model="ir.ui.view">
+        <field name="name">sub.work.category.tree</field>
+        <field name="model">sub.work.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="work_category_id"/>
+                <field name="is_finished_wo"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="construction_sub_work_category_search_view" model="ir.ui.view">
+        <field name="name">sub.work.category.search</field>
+        <field name="model">sub.work.category</field>
+        <field name="arch" type="xml">
+            <search string="SUB Work Category">
+                <field name="name"/>
+                <field name="work_category_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Service Category" domain="[('is_finished_wo','!=',True)]" name="service_sub_work_category"/>
+                    <filter string="Finished Category" domain="[('is_finished_wo','=',True)]" name="finished_sub_work_category"/>
+                    <filter string="Work Category" name="work_category" context="{'group_by':'work_category_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sub_work_category" model="ir.actions.act_window">
+        <field name="name">Sub Work Category</field>
+        <field name="res_model">sub.work.category</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_sub_work_category" id="menu_sub_work_category"
+        parent="sub_menu_register" sequence="51"/>
+
+</odoo>

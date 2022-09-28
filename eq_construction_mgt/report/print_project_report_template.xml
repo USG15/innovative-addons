@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="print_project_report_template">
+            <t t-call="report.external_layout">
+                <div class="page">
+                    <t t-set="total_rule_sum_dict" t-value="{}"/>
+                    <div class="col-md-12 text-center">
+                        <h4><span  style="font-weight:bold;" t-field="docs.project_id"/></h4>
+
+                        <t t-if="docs.sorted_by =='Work Order'">
+                            <br/>
+                            <h4><span  style="font-weight:bold;">Work Order Wise</span></h4>
+                        </t>
+
+                    </div>
+
+                    <t t-if="docs.sorted_by =='Product'">
+                        <t t-set="grand_sub_qty_in" t-value="0.00"/>
+                        <t t-set="grand_sub_qty_out" t-value="0.00"/>
+                        <t t-set="grand_sub_amount_in" t-value="0.00"/>
+                        <t t-set="grand_sub_amount_out" t-value="0.00"/>
+
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr style="font-weight:bold;">
+                                    <td>Voucher #</td>
+                                    <td>Date</td>
+                                    <td>Qty In</td>
+                                    <!-- <td>Qty Out</td> -->
+                                    <td>Rate Per Unit</td>
+                                    <td>Amount In</td>
+                                    <!-- <td>Amount Out</td> -->
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <t t-foreach="get_report_list" t-as="product">
+                                    <tr>
+                                        <td colspan="7">
+                                            <span style="font-weight:bold;" t-esc="product.display_name"/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="sub_qty_in" t-value="0.00"/>
+                                    <t t-set="sub_qty_out" t-value="0.00"/>
+                                    <t t-set="sub_amount_in" t-value="0.00"/>
+                                    <t t-set="sub_amount_out" t-value="0.00"/>
+                                    <tr t-foreach="product_value" t-as="l">
+                                        <td/>
+                                        <td>
+                                            <span t-esc="l['date']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="l['qty_in']"/>
+                                            <t t-set="sub_qty_in" t-value="sub_qty_in + l['qty_in']"/>
+                                        </td>
+                                        <!-- <td>
+                                            <span t-esc="l['qty_out']"/>
+                                            <t t-set="sub_qty_out" t-value="sub_qty_out + l['qty_out']"/>
+                                        </td> -->
+                                        <td>
+                                            <span t-esc="l['rate']" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="l['amount_in']" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="sub_amount_in" t-value="sub_amount_in + l['amount_in']"/>
+                                        </td>
+                                        <!-- <td>
+                                            <span t-esc="l['amount_out']" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="sub_amount_out" t-value="sub_amount_out + l['amount_out']"/>
+                                        </td> -->
+                                    </tr>
+
+                                    <tr style="font-weight:bold;">
+                                        <td colspan="2">
+                                            <span>Sub Total</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="sub_qty_in"/>
+                                            <t t-set="grand_sub_qty_in" t-value="grand_sub_qty_in + sub_qty_in"/>
+                                        </td>
+                                        <!-- <td>
+                                            <span t-esc="sub_qty_out"/>
+                                            <t t-set="grand_sub_qty_out" t-value="grand_sub_qty_out + sub_qty_out"/>
+                                        </td> -->
+                                        <td/>
+                                        <td>
+                                            <span t-esc="sub_amount_in" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="grand_sub_amount_in" t-value="grand_sub_amount_in + sub_amount_in"/>
+                                        </td>
+                                        <!-- <td>
+                                            <span t-esc="sub_amount_out" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="grand_sub_amount_out" t-value="grand_sub_amount_out + sub_amount_out"/>
+                                        </td> -->
+                                    </tr>
+                                </t>
+                                <tr style="font-weight:bold;">
+                                    <td colspan="2">
+                                        <span>Grand Total</span>
+                                    </td>
+                                    <td>
+                                        <span t-esc="grand_sub_qty_in"/>
+                                    </td>
+                                    <!-- <td>
+                                        <span t-esc="grand_sub_qty_out"/>
+                                    </td> -->
+                                    <td/>
+                                    <td>
+                                        <span t-esc="grand_sub_amount_in" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                    </td>
+                                    <!-- <td>
+                                        <span t-esc="grand_sub_amount_out" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                    </td> -->
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </t>
+
+                    <t t-if="docs.sorted_by =='Date'">
+                        <t t-set="grand_sub_qty_in" t-value="0.00"/>
+                        <t t-set="grand_sub_qty_out" t-value="0.00"/>
+                        <t t-set="grand_sub_amount_in" t-value="0.00"/>
+                        <t t-set="grand_sub_amount_out" t-value="0.00"/>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr style="font-weight:bold;">
+                                    <td>Date</td>
+                                    <td>MIN #</td>
+                                    <td>Qty In</td>
+                                    <!-- <td>Qty Out</td> -->
+                                    <td>Rates</td>
+                                    <td>Amount In</td>
+                                    <!-- <td>Amount Out</td> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="get_report_list" t-as="data">
+                                    <t t-set="sub_qty_in" t-value="0.00"/>
+                                    <t t-set="sub_qty_out" t-value="0.00"/>
+                                    <t t-set="sub_amount_in" t-value="0.00"/>
+                                    <t t-set="sub_amount_out" t-value="0.00"/>
+                                    <tr>
+                                        <td colspan="5">
+                                            <span style="font-weight:bold;" t-esc="data[0]"/>
+                                        </td>
+                                    </tr>
+                                    <tr t-foreach="data[1]" t-as="l">
+                                        <td/>
+                                        <td>
+                                            <span t-esc="l['product_id']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="l['qty_in']"/>
+                                            <t t-set="sub_qty_in" t-value="sub_qty_in + l['qty_in']"/>
+                                        </td>
+                                        <!-- <td>
+                                            <span t-esc="l['qty_out']"/>
+                                            <t t-set="sub_qty_out" t-value="sub_qty_out + l['qty_out']"/>
+                                        </td> -->
+
+                                        <td>
+                                            <span t-esc="l['rate']" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="l['amount_in']" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="sub_amount_in" t-value="sub_amount_in + l['amount_in']"/>
+                                        </td>
+                                        <!-- <td>
+                                            <span t-esc="l['amount_out']" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="sub_amount_out" t-value="sub_amount_out + l['amount_out']"/>
+                                        </td> -->
+                                    </tr>
+
+                                    <tr style="font-weight:bold;">
+                                        <td colspan="2">
+                                            <span>Sub Total</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="sub_qty_in"/>
+                                            <t t-set="grand_sub_qty_in" t-value="grand_sub_qty_in + sub_qty_in"/>
+                                        </td>
+                                        <!-- <td>
+                                            <span t-esc="sub_qty_out"/>
+                                            <t t-set="grand_sub_qty_out" t-value="grand_sub_qty_out + sub_qty_out"/>
+                                        </td> -->
+                                        <td/>
+                                        <td>
+                                            <span t-esc="sub_amount_in" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="grand_sub_amount_in" t-value="grand_sub_amount_in + sub_amount_in"/>
+                                        </td>
+                                        <!-- <td>
+                                            <span t-esc="sub_amount_out" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="grand_sub_amount_out" t-value="grand_sub_amount_out + sub_amount_out"/>
+                                        </td> -->
+                                    </tr>
+
+                                </t>
+                                <tr style="font-weight:bold;">
+                                    <td colspan="2">
+                                        <span>Grand Total</span>
+                                    </td>
+                                    <td>
+                                        <span t-esc="grand_sub_qty_in"/>
+                                    </td>
+                                    <!-- <td>
+                                        <span t-esc="grand_sub_qty_out"/>
+                                    </td> -->
+                                    <td/>
+                                    <td>
+                                        <span t-esc="grand_sub_amount_in" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                    </td>
+                                    <!-- <td>
+                                        <span t-esc="grand_sub_amount_out" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                    </td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+
+
+                    <t t-if="docs.sorted_by =='Work Order'">
+                        <t t-set="grand_sub_qty_in" t-value="0.00"/>
+                        <t t-set="grand_sub_qty_out" t-value="0.00"/>
+                        <t t-set="grand_sub_amount_in" t-value="0.00"/>
+                        <t t-set="grand_sub_amount_out" t-value="0.00"/>
+
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr style="font-weight:bold;">
+                                    <td>WO #</td>
+                                    <td>Project</td>
+                                    <td>SWO #</td>
+                                    <td>SWO Name</td>
+                                    <td>Product</td>
+                                    <td>Qty</td>
+                                    <td>Total Amount</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <t t-set="grand_work_order_total" t-value="0.00"/>
+                                <t t-foreach="get_report_list" t-as="sub_wo">
+                                    <t t-set="work_order_total" t-value="0.00"/>
+                                    <t t-foreach="sub_wo_value" t-as="l">
+                                        <tr>
+                                            <td>
+                                                <span t-esc="l_value['work_order']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="l_value['project']"/>
+                                            </td>
+                                            
+                                            <td>
+                                                <span t-esc="l_value['swo_no']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="l_value['swo_name']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="l_value['product']"/>
+                                            </td>
+
+                                            <td>
+                                                <span t-esc="l_value['qty']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="l_value['total_amount']" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                                <t t-set="work_order_total" t-value="work_order_total + l_value['total_amount']"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr style="font-weight:bold;">
+                                        <td colspan="6">
+                                            <span>Sub Total</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="work_order_total" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="grand_work_order_total" t-value="grand_work_order_total + work_order_total"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <t t-set="without_work_order_total" t-value="0.00"/>
+                                <t t-foreach="get_report_list_without_sub_wo" t-as="sub_wo">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="sub_wo_value['work_order']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="sub_wo_value['project']"/>
+                                        </td>
+                                        
+                                        <td>
+                                            <span t-esc="sub_wo_value['swo_no']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="sub_wo_value['swo_name']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="sub_wo_value['product']"/>
+                                        </td>
+
+                                        <td>
+                                            <span t-esc="sub_wo_value['qty']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="sub_wo_value['total_amount']" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="without_work_order_total" t-value="without_work_order_total + sub_wo_value['total_amount']"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr style="font-weight:bold;">
+                                    <td colspan="6">
+                                        <span>Sub Total</span>
+                                    </td>
+                                    <td>
+                                        <span t-esc="without_work_order_total" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                        <t t-set="grand_work_order_total" t-value="grand_work_order_total + without_work_order_total"/>
+                                    </td>
+                                </tr>
+
+
+                                <!-- return picking -->
+
+                                <!-- <t t-set="ret_grand_work_order_total" t-value="0.00"/> -->
+                                <t t-foreach="ret_get_report_list" t-as="sub_wo">
+                                    <t t-set="ret_work_order_total" t-value="0.00"/>
+                                    <t t-foreach="sub_wo_value" t-as="l">
+                                        <tr>
+                                            <td>
+                                                <span t-esc="l_value['work_order']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="l_value['project']"/>
+                                            </td>
+                                            
+                                            <td>
+                                                <span t-esc="l_value['swo_no']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="l_value['swo_name']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="l_value['product']"/>
+                                            </td>
+
+                                            <td>
+                                                <span t-esc="l_value['qty']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="l_value['total_amount']" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                                <t t-set="ret_work_order_total" t-value="ret_work_order_total + l_value['total_amount']"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr style="font-weight:bold;">
+                                        <td colspan="6">
+                                            <span>Sub Total</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="ret_work_order_total" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="grand_work_order_total" t-value="grand_work_order_total + ret_work_order_total"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+
+                                <t t-set="ret_without_work_order_total" t-value="0.00"/>
+                                <t t-foreach="ret_get_report_list_without_sub_wo" t-as="sub_wo">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="sub_wo_value['work_order']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="sub_wo_value['project']"/>
+                                        </td>
+                                        
+                                        <td>
+                                            <span t-esc="sub_wo_value['swo_no']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="sub_wo_value['swo_name']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="sub_wo_value['product']"/>
+                                        </td>
+
+                                        <td>
+                                            <span t-esc="sub_wo_value['qty']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="sub_wo_value['total_amount']" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                            <t t-set="ret_without_work_order_total" t-value="ret_without_work_order_total + sub_wo_value['total_amount']"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr style="font-weight:bold;">
+                                    <td colspan="6">
+                                        <span>Sub Total</span>
+                                    </td>
+                                    <td>
+                                        <span t-esc="ret_without_work_order_total" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                        <t t-set="grand_work_order_total" t-value="grand_work_order_total + ret_without_work_order_total"/>
+                                    </td>
+                                </tr>
+
+
+
+
+
+                                <tr style="font-weight:bold;">
+                                    <td colspan="6">
+                                        <span>Grand Total</span>
+                                    </td>
+                                    <td>
+                                        <span t-esc="grand_work_order_total" t-esc-options='{"widget": "monetary", "display_currency": docs.project_id.currency_id}'/>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </t>
+
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>

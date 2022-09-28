@@ -1,0 +1,25 @@
+// TinyMCE
+.openerp {
+  .mce-tinymce {
+    .mce-menubtn button {
+      color: #4D4D4D;
+    }
+    &.mce-fullscreen {
+      z-index: 1001;
+    }
+    .mce-colorbutton .mce-preview {
+      margin-left: -8px;
+    }
+  }
+}
+
+.mce-window {
+  max-height: 400px;
+  textarea {
+    max-height: 270px;
+  }
+}
+
+.mce-window-body {
+  max-height: 350px;
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_purchasequotation_document" inherit_id="purchase.report_purchasequotation_document">
+        
+        <xpath expr="//table[1]/thead/tr//th[2]" position="attributes">
+            <attribute name="class">hidden</attribute>
+        </xpath>
+        <xpath expr="//table[1]/tbody/tr//td[2]" position="attributes">
+            <attribute name="class">hidden</attribute>
+        </xpath>
+
+        <xpath expr="//h2" position="replace">
+            <h2>Draft PO <span t-field="o.name"/></h2>
+        </xpath>
+    </template>
+</odoo>

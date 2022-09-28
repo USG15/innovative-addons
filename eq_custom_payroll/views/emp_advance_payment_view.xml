@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="employee_adv_payment_tree_view" model="ir.ui.view">
+        <field name="name">employee.adv.payment.tree</field>
+        <field name="model">employee.adv.payment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="emp_code"/>
+                <field name="employee_id"/>
+                <field name="approved_amount"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="employee_adv_payment_form_view" model="ir.ui.view">
+        <field name="name">employee.adv.payment.form</field>
+        <field name="model">employee.adv.payment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="do_confirm" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+                    <button name="do_approved" class="oe_highlight" states="confirm" string="Approved" type="object"/>
+                    <button name="do_cancel" class="oe_highlight" states="draft,confirm" string="Cancel" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_entries" class="oe_stat_button" icon="fa-money"
+                            string="Advance Payment"
+                            type="object" attrs="{'invisible': [('acc_move_id', '=', False)]}"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1 class="mt0">
+                            <field name="name" readonly="1" class="oe_inline"/>
+                        </h1>
+                    </div>
+                    <group col="4">
+                        <field name="employee_id" required="1" options="{'no_create':True}" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="emp_code" readonly="1" force_save="1"/>
+                        <field name="company_id" required="1" readonly="1" force_save="1" options="{'no_create':True}" groups="base.group_multi_company" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="acc_move_id" invisible="1"/>
+                        <field name="department_id" options="{'no_create':True}" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="job_id" options="{'no_create':True}" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="requested_date" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="requested_amount" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="confirmation_date" readonly="1" force_save="1"/>
+                        <field name="confirmation_amount" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="approval_date" attrs="{'invisible':[('state','=','draft')],'readonly':[('state','in',('approved','cancel'))]}"/>
+                        <field name="approved_amount" attrs="{'invisible':[('state','=','draft')],'readonly':[('state','!=','confirm')]}" />
+                        <field name="journal_id" required="1" options="{'no_create':True}" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="credit_account_id" required="1" options="{'no_create':True}" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="debit_account_id" required="1" options="{'no_create':True}" attrs="{'readonly':[('state','!=','draft')]}"/>
+                    </group>
+
+                    <group>
+                        <field name="comment" attrs="{'readonly':[('state','!=','draft')]}"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_adv_payment" model="ir.actions.act_window">
+        <field name="name">Advance Salary</field>
+        <field name="res_model">employee.adv.payment</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_employee_adv_payment" id="menu_emp_advance_payment"
+        parent="hr_payroll.menu_hr_payroll_root" />
+
+</odoo>

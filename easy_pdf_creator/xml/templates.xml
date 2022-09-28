@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress CheckTagEmptyBody -->
+<openerp>
+    <data>
+        <!-- Backend assets -->
+        <template id="assets_backend" name="custom bar assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/easy_pdf_creator/static/styles/css/screen.css"/>
+                <link rel="stylesheet" href="/easy_pdf_creator/static/js/lib/prism/prism.css"/>
+            </xpath>
+        </template>
+
+        <template id="web_editor_assets_backend"
+                  name="custom web_editor assets backend"
+                  inherit_id="web_editor.assets_backend">
+            <xpath expr="//script[@src='/web_editor/static/src/js/backend.js']" position="replace">
+                <script type="text/javascript" src="/easy_pdf_creator/static/js/lib/tinymce/tinymce.min.js"></script>
+                <script type="text/javascript" src="/easy_pdf_creator/static/js/lib/prism/prism.js"></script>
+                <script type="text/javascript" src="/easy_pdf_creator/static/js/lib/tinymce/jquery.tinymce.min.js"></script>
+                <script type="text/javascript" src="/easy_pdf_creator/static/js/lib/jquery.livequery.js"></script>
+                <script type="text/javascript" src="/easy_pdf_creator/static/js/html_editor.js"></script>
+                <script type="text/javascript" src="/easy_pdf_creator/static/js/easy_print.js"></script>
+            </xpath>
+        </template>
+
+    </data>
+</openerp>

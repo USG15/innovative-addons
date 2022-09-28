@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="report_payslip_template">
+            <t t-call="report.html_container">
+                <t t-call="report.internal_layout">
+                    <div class="page">
+                        <t t-set="currency_id" t-value="company_id.currency_id"/>
+                        <t t-set="lang" t-value="request.env['res.lang'].sudo().search([('code','=',user.lang)],limit=1)"/>
+                        <t t-set="fmt" t-value='"%.{0}f".format(currency_id.decimal_places)'/>
+                        <style>
+                            table, tr, td, th {
+                                border: 1px solid black !important;
+                            }
+                        </style>
+                        <t t-set="total_rule_sum_dict" t-value="{}"/>
+                        <table border="1" class="table">
+                            <tr style="border:1px solid black;background-color:grey;">
+                                <th rowspan="2">No #</th>
+                                <th rowspan="2">Payslip Ref</th>
+                                <th rowspan="2">Code</th>
+                                <th rowspan="2">Employee</th>
+                                <th rowspan="2">Designation</th>
+                                <th rowspan="2">Department</th>
+                                <th rowspan="2">Period</th>
+                                <t t-foreach="_get_header" t-as="idx">
+                                    <t t-foreach="idx" t-as="key">
+                                        <th t-att-colspan="len(key_value)" class="text-center"><span t-esc="key.name"/></th>
+                                    </t>
+                                </t>
+                                <th rowspan="2">Arrears</th>
+                                <th rowspan="2">Grand Total</th>
+                            </tr>
+                            <tr>
+                                <t t-foreach="_get_header" t-as="idx">
+                                    <t t-foreach="idx.values()" t-as="key">
+                                        <t t-foreach="key_value" t-as="rule">
+                                            <th class="text-center" style="background-color:grey;"><span t-esc="rule.name"/></th>
+                                        </t>
+                                    </t>
+                                </t>
+                            </tr>
+
+                            <t t-if="report_by">
+                                <tr t-foreach="get_group_wise_data" t-as="key">
+                                    <t t-set="total_rule_sum_dict" t-value="{}"/>
+                                    <t t-set="total_arrears" t-value="0.00"/>
+                                    <t t-set="total_grand_total" t-value="0.00"/>
+                                    <tr>
+                                        <td colspan="30" class="text-center" style="font-weight:bold;">
+                                            <span t-esc="key.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr t-foreach="key_value" t-as="payslip">
+                                        <td>
+                                            <span t-esc="payslip_index + 1"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="payslip.number"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="payslip.employee_id.emp_code"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="payslip.employee_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="payslip.contract_id.job_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="payslip.contract_id.department_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="payslip.date_from"/> to <span t-field="payslip.date_to"/>
+                                        </td>
+                                        <t t-foreach="_get_rule_list" t-as="col_rule_id">
+                                            <td class="text-right">
+                                                <t t-set="amount" t-value="payslip.line_ids.filtered(lambda l: l.salary_rule_id.id == col_rule_id.id).total"/>
+                                                <span t-esc="lang.format(fmt,amount,grouping=True)"/>
+                                                <t t-if="col_rule_id not in total_rule_sum_dict">
+                                                    <t t-set="total_rule_sum_dict" t-esc="total_rule_sum_dict.update({col_rule_id: []})"/>
+                                                </t>
+                                                <t t-set="total_rule_sum_dict" t-esc="total_rule_sum_dict[col_rule_id].append(amount)"/>
+                                            </td>
+                                        </t>
+                                        <td>
+                                            <t t-set="total_arrears" t-value="total_arrears + payslip.arrears"/>
+                                            <span t-esc="lang.format(fmt,payslip.arrears,grouping=True)"/>
+                                        </td>
+                                        <td>
+                                            <t t-set="total_grand_total" t-value="total_grand_total + (payslip.arrears + payslip.net_amount)"/>
+                                            <span t-esc="lang.format(fmt,(payslip.arrears + payslip.net_amount),grouping=True)"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-center" style="font-weight:bold;">Total</td>
+                                        <td t-foreach="_get_rule_list" t-as="col_rule_id" class="text-right" style="font-weight:bold">
+                                            <span t-esc="lang.format(fmt,sum(total_rule_sum_dict.get(col_rule_id)),grouping=True)"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="lang.format(fmt,total_arrears,grouping=True)"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="lang.format(fmt,total_grand_total,grouping=True)"/>
+                                        </td>
+                                    </tr>
+                                </tr>
+                            </t>
+                            <t t-if="not report_by">
+                                <t t-set="total_arrears" t-value="0.00"/>
+                                <t t-set="total_grand_total" t-value="0.00"/>
+                                <tr t-foreach="slip_ids" t-as="payslip">
+                                    <td>
+                                        <span t-esc="payslip_index + 1"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="payslip.number"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="payslip.employee_id.emp_code"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="payslip.employee_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="payslip.contract_id.job_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="payslip.contract_id.department_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="payslip.date_from"/> to <span t-field="payslip.date_to"/>
+                                    </td>
+                                    <t t-foreach="_get_rule_list" t-as="col_rule_id">
+                                        <td class="text-right">
+                                            <t t-set="amount" t-value="payslip.line_ids.filtered(lambda l: l.salary_rule_id.id == col_rule_id.id).total"/>
+                                            <span t-esc="lang.format(fmt,amount,grouping=True)"/>
+                                            <t t-if="col_rule_id not in total_rule_sum_dict">
+                                                <t t-set="total_rule_sum_dict" t-esc="total_rule_sum_dict.update({col_rule_id: []})"/>
+                                            </t>
+                                            <t t-set="total_rule_sum_dict" t-esc="total_rule_sum_dict[col_rule_id].append(amount)"/>
+                                        </td>
+                                    </t>
+                                    <td>
+                                        <t t-set="total_arrears" t-value="total_arrears + payslip.arrears"/>
+                                        <span t-esc="lang.format(fmt,payslip.arrears,grouping=True)"/>
+                                    </td>
+                                    <td>
+                                        <t t-set="total_grand_total" t-value="total_grand_total + (payslip.arrears + payslip.net_amount)"/>
+                                        <span t-esc="lang.format(fmt,(payslip.arrears + payslip.net_amount),grouping=True)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-center" style="font-weight:bold;">Total</td>
+                                    <td t-foreach="_get_rule_list" t-as="col_rule_id" class="text-right" style="font-weight:bold">
+                                        <span t-esc="lang.format(fmt,sum(total_rule_sum_dict.get(col_rule_id)),grouping=True)"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="lang.format(fmt,total_arrears,grouping=True)"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="lang.format(fmt,total_grand_total,grouping=True)"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

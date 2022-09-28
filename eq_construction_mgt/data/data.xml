@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+    
+        <record id="work_order_seq" model="ir.sequence">
+            <field name="name">Work Order</field>
+            <field name="code">construction.work.order</field>
+            <field name="prefix">WO/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="sub_work_order_seq" model="ir.sequence">
+            <field name="name">Sub Work Order</field>
+            <field name="code">sub.construction.work.order</field>
+            <field name="prefix">SUB/WO/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="progress_order_seq" model="ir.sequence">
+            <field name="name">Progress Work Order</field>
+            <field name="code">construction.sub.work.order.line</field>
+            <field name="prefix">PROG/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="finished_work_order_seq" model="ir.sequence">
+            <field name="name">Finished Work Order</field>
+            <field name="code">finished.construction.work.order</field>
+            <field name="prefix">FWO/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="finished_sub_work_order_seq" model="ir.sequence">
+            <field name="name">Finished Sub Work Order</field>
+            <field name="code">finished.sub.work.order</field>
+            <field name="prefix">SUB/FWO/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="finished_progress_order_seq" model="ir.sequence">
+            <field name="name">Finished Progress Work Order</field>
+            <field name="code">finished.sub.work.order.progress</field>
+            <field name="prefix">FWO/PROG/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="po_approve_demand_seq" model="ir.sequence">
+            <field name="name">Approve Demand</field>
+            <field name="code">po.approve.demand</field>
+            <field name="prefix">PO/APP/</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+
+    <data noupdate="1">
+        <record id="rental_reg_seq" model="ir.sequence">
+            <field name="name">Rental Registration</field>
+            <field name="code">rental.registration</field>
+            <field name="prefix">RENT/</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>
+
+

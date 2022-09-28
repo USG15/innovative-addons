@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="inherit_view_picking_form" model="ir.ui.view">
+        <field name="name">stock.picking.form</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <button name="do_new_transfer" position="replace">
+                <button name="do_new_transfer" string="Validate" groups="stock.group_stock_manager"
+                    type="object" class="oe_highlight" attrs="{'invisible':[('show_validate_button','!=',True)]}"/>
+            </button>
+            <button name="do_new_transfer" position="before">
+               <button name="verify_transfer" string="Verify Receipt" type="object" class="oe_highlight"
+                attrs="{'invisible':['|',('show_varify_button','!=',True),('done_varify_by_user','=',True)]}"/>
+            </button>
+
+            <field name="origin" position="after">
+                <field name="varify_user_id" readonly="1" force_save="1" attrs="{'invisible':[('varify_user_id','=',False)]}"/>
+                <field name="show_varify_button" invisible="1"/>
+                <field name="done_varify_by_user" invisible="1"/>
+                <field name="show_validate_button" invisible="1"/>
+                <field name="readonly_field_by_user" invisible="1"/>
+            </field>
+
+            <field name="partner_id" position="attributes">
+                <attribute name="attrs">{'readonly':['|',('state','in',('cancel','done')),('readonly_field_by_user','=',True)]}</attribute>
+            </field>
+            <field name="min_date" position="attributes">
+                <attribute name="attrs">{'readonly':['|',('state','in',('cancel','done')),('readonly_field_by_user','=',True)]}</attribute>
+            </field>
+            <field name="origin" position="attributes">
+                <attribute name="attrs">{'readonly':['|',('state','in',('cancel','done')),('readonly_field_by_user','=',True)]}</attribute>
+            </field>
+            <xpath expr="//notebook/page//field[@name='pack_operation_product_ids']" position="attributes">
+                <attribute name="attrs">{'readonly':['|',('state','in',('cancel','done')),('readonly_field_by_user','=',True)]}</attribute>
+            </xpath>
+            <xpath expr="//notebook/page//field[@name='pack_operation_pack_ids']" position="attributes">
+                <attribute name="attrs">{'readonly':['|',('state','in',('cancel','done')),('readonly_field_by_user','=',True)]}</attribute>
+            </xpath>
+            <xpath expr="//notebook/page//field[@name='move_lines']" position="attributes">
+                <attribute name="attrs">{'readonly':['|',('state', 'in', ('cancel', 'partially_available', 'assigned', 'done')),('readonly_field_by_user','=',True)]}</attribute>
+            </xpath>
+            <xpath expr="//notebook/page//field[@name='note']" position="attributes">
+                <attribute name="attrs">{'readonly':['|',('state','in',('cancel','done')),('readonly_field_by_user','=',True)]}</attribute>
+            </xpath>
+            <xpath expr="//notebook/page[@name='extra']//group/field[@name='move_type']" position="attributes">
+                <attribute name="attrs">{'readonly':['|',('state','in',('cancel','done')),('readonly_field_by_user','=',True)]}</attribute>
+            </xpath>
+            <xpath expr="//notebook/page[@name='extra']//group/field[@name='company_id']" position="attributes">
+                <attribute name="attrs">{'readonly':['|',('state','in',('cancel','done')),('readonly_field_by_user','=',True)]}</attribute>
+            </xpath>
+            <xpath expr="//notebook/page[@name='extra']//group/field[@name='priority']" position="attributes">
+                <attribute name="attrs">{'readonly':['|',('state','in',('cancel','done')),('readonly_field_by_user','=',True)]}</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

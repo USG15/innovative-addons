@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="employee_ledger_report_template">
+            <t t-call="report.html_container">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <t t-set="currency_id" t-value="company_id.currency_id"/>
+                        <t t-set="lang" t-value="request.env['res.lang'].sudo().search([('code','=',user.lang)],limit=1)"/>
+                        <t t-set="fmt" t-value='"%.{0}f".format(currency_id.decimal_places)'/>
+                        <style>
+                            table, tr, td, th {
+                                border: 1px solid black !important;
+                            }
+                        </style>
+                        <t t-if="docs.report_by == 'ledger'">
+                            <t t-set="employee_ids" t-value="docs.get_employee()"/>
+                            <t t-set="total" t-value="0.00"/> 
+                            <center><h2>Ledger Report</h2></center><br/>
+                            <table border="1" class="table">
+                                <thead>
+                                    <tr style="border:1px solid black;background-color:grey;">
+                                        <th>Date</th>
+                                        <th>Voucher No</th>
+                                        <th>Description</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Total Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="employee_ids" t-as="emp">
+                                        <tr>
+                                            <td colspan="6" class="text-center" style="font-weight:bold;">
+                                                <t t-if="emp.emp_code">
+                                                    <span t-esc="emp.emp_code"/> - <span t-esc="emp.name"/>  - <span t-esc="emp.department_id.name"/>
+                                                </t>
+                                                <t t-if="not emp.emp_code">
+                                                    <span t-esc="emp.name"/>  - <span t-esc="emp.department_id.name"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+
+                                        <t t-set="ledger_balance_lst" t-value="docs.get_ledger_balance_report(emp)"/>
+                                        <t t-set="payslip_ids" t-value="docs.find_emp_payslip(emp)"/>
+                                        <t t-set="emp_wise_total" t-value="0.00"/> 
+
+                                        <tr t-foreach="ledger_balance_lst" t-as="data">
+                                            <t t-set="emp_wise_total" t-value="emp_wise_total + data['total_amount']"/>
+                                            <td>
+                                                <span t-esc="data['date']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="data['voucher_no']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="data['desc']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="data['type']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="data['amount']" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="emp_wise_total" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5" class="text-center" style="font-weight:bold;">Total Amount- Receivable/(Payable)</td>
+                                            <td style="font-weight:bold;">
+                                                <span t-esc="emp_wise_total" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/> 
+                                            </td>
+                                        </tr>
+
+
+
+                                        <!-- <tr t-foreach="payslip_ids" t-as="payslip">
+                                            <t t-set="emp_wise_total" t-value="emp_wise_total + payslip.net_amount"/>
+                                            <td>
+                                                <span t-esc="payslip.date_to"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="payslip.number"/>
+                                            </td>
+                                            <td>
+                                                <span>Payslip</span>
+                                            </td>
+                                            <td>
+                                                <span>Payslip</span>
+                                            </td>
+                                            <td>
+                                                <span t-esc="payslip.net_amount" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="emp_wise_total" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                            </td>
+                                        </tr>
+
+                                        <t t-set="payslip_payment_data" t-value="docs.find_emp_payslip_payment(emp)"/>
+                                        <tr t-foreach="payslip_payment_data" t-as="payslip_payment">
+                                            <td>
+                                                <span t-esc="payslip_payment.partial_payment_id.acc_date"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="payslip_payment.partial_payment_id.name"/>
+                                            </td>
+                                            <td>
+                                                <span>Payslip Payment</span>
+                                            </td>
+                                            <td>
+                                                <span>Payslip Payment</span>
+                                            </td>
+                                            <td>
+                                                <t t-if="not payslip_payment.amount">
+                                                    <span t-esc="payslip_payment.amount" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                                </t>
+                                                <t t-if="payslip_payment.amount">
+                                                    <span t-esc="-payslip_payment.amount" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <span t-esc="(emp_wise_total - payslip_payment.amount)" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                                <t t-set="emp_wise_total" t-value="(emp_wise_total - payslip_payment.amount)"/>
+                                            </td>
+                                        </tr>
+
+                                        <t t-set="advance_salary_data" t-value="docs.find_emp_advance_salary(emp)"/>
+                                        <tr t-foreach="advance_salary_data" t-as="advance_salary">
+                                            <td>
+                                                <span t-esc="advance_salary.approval_date"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="advance_salary.name"/>
+                                            </td>
+                                            <td>
+                                                <span>Advance Salary</span>
+                                            </td>
+                                            <td>
+                                                <span>Advance Salary</span>
+                                            </td>
+                                            <td>
+                                                <span t-esc="-(advance_salary.approved_amount)" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="(emp_wise_total - advance_salary.approved_amount)" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                                <t t-set="emp_wise_total" t-value="(emp_wise_total - advance_salary.approved_amount)"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5" class="text-center" style="font-weight:bold;">Total Amount (Receivable/Payable)</td>
+                                            <td style="font-weight:bold;">
+                                                <span t-esc="emp_wise_total" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/> 
+                                            </td>
+                                        </tr> -->
+
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <t t-if="docs.report_by == 'trial'">
+                            <center><h2>Trial Balance Report</h2></center><br/>
+                            <t t-set="total" t-value="0.00"/> 
+                            <table border="1" class="table">
+                                <thead>
+                                    <tr style="border:1px solid black;background-color:grey;">
+                                        <th>Code</th>
+                                        <th>Employee</th>
+                                        <th>Department</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="trial_balance_lst" t-as="l">
+                                        <td>
+                                            <span t-esc="l['employee'].emp_code"/> 
+                                        </td>
+                                        <td>
+                                            <span t-esc="l['employee'].name"/> 
+                                        </td>
+                                        <td>
+                                            <span t-esc="l['employee'].department_id.name"/> 
+                                        </td>
+                                        <td>
+                                            <span t-esc="l['balance']" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                            <t t-set="total" t-value="total + l['balance']"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" class="text-center" style="font-weight:bold;">Total</td>
+                                        <td style="font-weight:bold;">
+                                            <span t-esc="total" t-esc-options='{"widget": "monetary", "display_currency": currency_id}'/> 
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

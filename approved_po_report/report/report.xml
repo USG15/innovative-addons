@@ -1,0 +1,12 @@
+<odoo>
+    <!-- QWeb Reports -->
+    <!-- NAME & FILE_NAME should be the same -->
+            <report
+                id="approved_id"
+                model="purchase.order"
+                report_type="qweb-pdf"
+                string="Approved Report"
+                name="approved_po_report.approved_po_report_id"
+                file="approved_po_report._approved_po_report_id"
+            />
+</odoo>

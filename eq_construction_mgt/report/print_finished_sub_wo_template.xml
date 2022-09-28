@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="print_finished_sub_wo_template_document">
+    <t t-call="report.external_layout">
+        <div class="page">
+            <h2>
+                <span>Finished SUB WO- </span>
+                <span t-field="o.name"/>
+            </h2>
+
+            <div class="row mt32 mb32">
+                <div class="col-xs-6">
+                    <strong>Vendor:</strong>
+                    <span t-field="o.vendor_id"/>
+                </div>
+                <div class="col-xs-6">
+                    <strong>Work Category:</strong>
+                    <span t-field="o.work_category_id"/>
+                </div>
+            </div>
+
+            <div class="row mt32 mb32">
+                <div class="col-xs-6">
+                    <strong>Work Order:</strong>
+                    <span t-field="o.work_order_id"/>
+                </div>
+                <div class="col-xs-6">
+                    <strong>Order Date:</strong>
+                    <span t-field="o.order_date"/>
+                </div>
+            </div>
+
+            <div class="row mt32 mb32">
+                <div class="col-xs-6">
+                    <strong>Project:</strong>
+                    <span t-field="o.project_id"/>
+                </div>
+                <div class="col-xs-6">
+                    <strong>Total Remaining Amount:</strong>
+                    <span t-field="o.total_remaining_amt"/>
+                </div>
+            </div>
+
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Activity</th>
+                        <th>To Be Received</th>
+                        <th>Qty</th>
+                        <th>Received Qty</th>
+                    </tr>
+                </thead>
+                <tbody class="invoice_tbody">
+                    <tr t-foreach="o.sub_work_order_ids" t-as="l">
+                        <td><span t-field="l.finished_work_order_line_id"/></td>
+                        <td><span t-field="l.to_be_received_qty"/></td>
+                        <td>
+                            <span t-field="l.qty"/>
+                        </td>
+                        <td>
+                            <span t-field="l.received_qty"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </t>
+</template>
+
+<template id="print_finished_sub_wo_template">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="eq_construction_mgt.print_finished_sub_wo_template_document"/>
+        </t>
+    </t>
+</template>
+
+</data>
+</odoo>

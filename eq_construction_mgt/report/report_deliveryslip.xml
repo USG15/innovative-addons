@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="report_delivery_document" inherit_id="stock.report_delivery_document">
+        <xpath expr="//table[@class='table table-condensed'][1]" position="replace">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th t-if="o.origin"><strong>Order (Origin)</strong></th>
+                        <th name="td_sched_date_h">
+                            <strong>Date</strong>
+                        </th>
+                        <th t-if="o.project_id"><strong>Project</strong></th>
+                        <th t-if="o.sub_work_order_id"><strong>Sub Work Order</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td t-if="o.origin">
+                            <span t-field="o.origin"/>
+                        </td>
+                        <td name="td_sched_date">
+                            <t t-if="o.state == 'done'">
+                                <span t-field="o.date_done"/>
+                            </t>
+                            <t t-if="o.state != 'done'">
+                                <span t-field="o.min_date"/>
+                            </t>
+                        </td>
+                        <td t-if="o.project_id">
+                            <span t-field="o.project_id"/>
+                        </td>
+                        <td t-if="o.sub_work_order_id">
+                            <span t-field="o.sub_work_order_id"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+
+</odoo>

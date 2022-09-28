@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <!-- QWeb Reports -->
+        <!-- NAME & FILE_NAME should be the same -->
+                <report
+                    id="DC_id"
+                    model="sale.order"
+                    report_type="qweb-pdf"
+                    string="DC Print"
+                    name="DC_report.DC_report_ids"
+                    file="DC_report.DC_report_ids"
+                />
+    </data>
+</odoo>

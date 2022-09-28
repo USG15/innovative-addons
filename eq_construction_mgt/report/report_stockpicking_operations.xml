@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="report_picking1" inherit_id="stock.report_picking">
+        <xpath expr="//table[1]//thead/th[last()]" position="after">
+            <th t-if="o.project_id"><strong>Project</strong></th>
+            <th t-if="o.sub_work_order_id"><strong>Sub Work Order</strong></th>
+        </xpath>
+        <!-- <xpath expr="//tbody/td[last()]" position="after">
+            <td t-if="o.project_id">
+                <span t-field="o.project_id"/>
+            </td>
+            <td t-if="o.sub_work_order_id">
+                <span t-field="o.sub_work_order_id"/>
+            </td>
+        </xpath> -->
+    </template>
+
+</odoo>

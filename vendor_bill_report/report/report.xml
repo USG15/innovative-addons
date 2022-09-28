@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <!-- QWeb Reports -->
+        <!-- NAME & FILE_NAME should be the same -->
+                <report
+                    id="vendor_bill_id"
+                    model="account.invoice"
+                    report_type="qweb-pdf"
+                    string="Bill Print"
+                    name="vendor_bill_report.vendor_bill_report_ids"
+                    file="vendor_bill_report.vendor_bill_report_ids"
+                />
+    </data>
+</odoo>

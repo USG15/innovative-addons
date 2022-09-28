@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Test picking print -->
+    <record id="stock_picking_form_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <button name="action_to_print" class="oe_highlight" 
+                    string="Print PDF" states="partially_available,assigned,done" type="object"/>
+                <button name="action_to_print_move" class="oe_highlight" 
+                    string="Print PDF2" states="confirmed,draft" type="object"
+                    help="Not ready picking print"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

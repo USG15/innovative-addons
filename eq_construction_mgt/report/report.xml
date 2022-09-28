@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report 
+            id="action_print_project_report"
+            string="Project Report"
+            model="wizard.project.report" 
+            report_type="qweb-pdf"
+            file="eq_construction_mgt.print_project_report_template"
+            name="eq_construction_mgt.print_project_report_template"/>
+
+        <report 
+            id="action_print_rental_registration"
+            string="Rental Registration"
+            model="rental.registration" 
+            report_type="qweb-pdf"
+            file="eq_construction_mgt.print_rental_registration_template"
+            name="eq_construction_mgt.print_rental_registration_template"/>
+
+        <report 
+            id="action_print_serive_wo"
+            string="Work Order"
+            model="construction.work.order" 
+            report_type="qweb-pdf"
+            file="eq_construction_mgt.print_service_wo_template"
+            name="eq_construction_mgt.print_service_wo_template"/>
+
+        <report 
+            id="action_print_serive_sub_wo"
+            string="Sub Work Order"
+            model="construction.sub.work.order"
+            report_type="qweb-pdf"
+            file="eq_construction_mgt.print_service_sub_wo_template"
+            name="eq_construction_mgt.print_service_sub_wo_template"/>
+
+        <report 
+            id="action_print_serive_sub_progress"
+            string="Progress"
+            model="construction.sub.work.order.line"
+            report_type="qweb-pdf"
+            file="eq_construction_mgt.print_service_progress_template"
+            name="eq_construction_mgt.print_service_progress_template"/>
+
+
+        <report 
+            id="action_print_finished_wo"
+            string="Work Order"
+            model="finished.construction.work.order" 
+            report_type="qweb-pdf"
+            file="eq_construction_mgt.print_finished_wo_template"
+            name="eq_construction_mgt.print_finished_wo_template"/>
+
+        <report 
+            id="action_print_finished_sub_wo"
+            string="Sub Work Order"
+            model="finished.sub.work.order"
+            report_type="qweb-pdf"
+            file="eq_construction_mgt.print_finished_sub_wo_template"
+            name="eq_construction_mgt.print_finished_sub_wo_template"/>
+
+        <report 
+            id="action_print_finished_sub_progress"
+            string="Progress"
+            model="finished.sub.work.order.progress"
+            report_type="qweb-pdf"
+            file="eq_construction_mgt.print_finished_progress_template"
+            name="eq_construction_mgt.print_finished_progress_template"/>
+
+        <report 
+            string="Draft PO" 
+            id="purchase.report_purchase_quotation" 
+            model="purchase.order"
+            report_type="qweb-pdf"
+            name="purchase.report_purchasequotation" 
+            file="purchase.report_purchasequotation"
+        />
+
+        <report 
+            string="Approved PO" 
+            id="purchase.action_report_purchase_order" 
+            model="purchase.order" 
+            report_type="qweb-pdf"
+            name="purchase.report_purchaseorder" 
+            file="purchase.report_purchaseorder" 
+        />
+
+        <report
+            id="account_receipt"
+            model="account.payment"
+            string="Receipt"
+            report_type="qweb-pdf"
+            name="eq_construction_mgt.report_receipt"
+            file="eq_construction_mgt.report_receipt"
+        />
+
+        <report 
+            id="action_print_quotation"
+            string="Quotation"
+            model="po.approve.demand"
+            report_type="qweb-pdf"
+            file="eq_construction_mgt.print_quotation_template"
+            name="eq_construction_mgt.print_quotation_template"/>
+
+        <report 
+            id="action_print_quotation_with_price"
+            string="Quotation With Price"
+            model="po.approve.demand"
+            report_type="qweb-pdf"
+            file="eq_construction_mgt.print_quotation_with_price_template"
+            name="eq_construction_mgt.print_quotation_with_price_template"/>
+
+        <report
+            string="Goods Receive Note"
+            id="stock.action_report_picking"
+            model="stock.picking"
+            report_type="qweb-pdf"
+            name="stock.report_picking"
+            file="stock.report_picking_operations"
+        />
+        <report
+            string="Goods Issuance Note"
+            id="stock.action_report_delivery"
+            model="stock.picking"
+            report_type="qweb-pdf"
+            name="stock.report_deliveryslip"
+            file="stock.report_deliveryslip"
+        />
+
+    </data>
+</odoo>

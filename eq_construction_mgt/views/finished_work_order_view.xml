@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+    <menuitem id="menu_finished_workorder" name="Finished Work Order" parent="eq_construction_mgt.main_menu_construction" sequence="91"/>
+
+    <record id="finished_construction_work_order_form_view" model="ir.ui.view">
+        <field name="name">finished.construction.work.order.form</field>
+        <field name="model">finished.construction.work.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="do_confirm" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+                    <button name="do_approval" class="oe_highlight" states="confirm" string="Approval" type="object"/>
+                    <button name="do_finished" class="oe_highlight" attrs="{'invisible':[('show_finish_button','!=',True)]}" string="Finish" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_sub_workorders" class="oe_stat_button" icon="fa-tasks" states="approved,finished">
+                            <field name="sub_workorders_count" widget="statinfo" string="Sub Work Orders"/>
+                        </button>
+                    </div>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1" class="oe_inline" attrs="{'invisible': [('state','in',('draft'))]}"/>
+                    </h1>
+                    <group col="4">
+                        <field name="work_category_id" options="{'no_create':True}" domain="[('is_finished_wo','=',True)]" context="{'default_is_finished_wo':True}" required="1" attrs="{'readonly':[('state','in',('approved','finished'))]}"/>
+                        <field name="area" attrs="{'readonly':[('state','in',('approved','finished'))]}"/>
+                        <field name="agreed_amount"/>
+                        <field name="total_progress_amount" readonly="1" force_save="1"/>
+                        <field name="approval_date" readonly="1"/>
+                        <field name="show_finish_button" invisible="1"/>
+                        <field name="company_id" required="1" options="{'no_create': True}" groups="base.group_multi_company"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group>
+                        <button name="open_activity" class="oe_highlight" states="draft,confirm" string="Choose Subwork" type="object"/>
+                    </group>
+                    <notebook>
+                        <page name="work_order_lines" string="Work Order Lines">
+                            <field name="work_order_ids" attrs="{'readonly':[('state','in',('approved','finished'))]}">
+                                <tree editable="bottom" delete="0">
+                                    <field name="sr_no"/>
+                                    <field name="name" required="1"/>
+                                    <field name="description" invisible="1"/>
+                                    <field name="qty" required="1"/>
+                                    <field name="length" required="1"/>
+                                    <field name="width" required="1"/>
+                                    <field name="sft" required="1"/>
+                                    <field name="total_sft" required="1" sum="Total SFT"/>
+                                    <field name="rate" required="1"/>
+                                    <field name="amount" required="1" sum="Total Amount"/>
+                                    <field name="finished_work_order_id" invisible="1"/>
+                                    <field name="activity_done" invisible="1"/>
+                                    <field name="done_amount" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                            <div>
+                                <field name="comment" placeholder="Additional notes..." attrs="{'readonly':[('state','in',('approved','finished'))]}"/>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="finished_construction_work_order_tree_view" model="ir.ui.view">
+        <field name="name">finished.construction.work.order.tree</field>
+        <field name="model">finished.construction.work.order</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="work_category_id"/>
+                <field name="area"/>
+                <field name="state"/>
+                <field name="agreed_amount" sum="Total Agreed Amount"/>
+                <field name="company_id" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="finished_construction_work_order_search_view" model="ir.ui.view">
+        <field name="name">finished.construction.work.order.search</field>
+        <field name="model">finished.construction.work.order</field>
+        <field name="arch" type="xml">
+            <search string="Work Order">
+                <field name="name"/>
+                <field name="work_category_id"/>
+                <field name="state"/>
+                <field name="area"/>
+                <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="confirm" string="Confirm" domain="[('state','=','confirm')]"/>
+                <filter name="approved" string="Approved" domain="[('state','=','approved')]"/>
+                <filter name="finished" string="Finished" domain="[('state','=','finished')]"/>
+                <filter string="Today" name="today" domain="[('approval_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Work Category" name="work_category_id" context="{'group_by':'work_category_id'}"/>
+                    <filter string="State" name="state" context="{'group_by':'state'}"/>
+                    <filter string="Area" name="area" context="{'group_by':'area'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_finished_construction_work_order" model="ir.actions.act_window">
+        <field name="name">Work Order</field>
+        <field name="res_model">finished.construction.work.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem action="action_finished_construction_work_order" id="menu_finished_construction_work_order"
+        parent="menu_finished_workorder" sequence="50"/>
+
+    <record id="finished_construction_sub_work_order_form_view" model="ir.ui.view">
+        <field name="name">finished.sub.work.order.form</field>
+        <field name="model">finished.sub.work.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="do_confirm" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+                    <button name="do_approval" class="oe_highlight" states="confirm" string="Approval" type="object"/>
+                    <button name="do_finished" class="oe_highlight" attrs="{'invisible':[('show_finish_button','!=',True)]}" string="Finish" type="object"/>
+                    <button name="do_change_vendor" class="oe_highlight" attrs="{'invisible':['|',('state','=','finished'),('show_finish_button','=',True)]}" string="Change Vendor" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_progress" class="oe_stat_button" icon="fa-tasks" states="approved,finished">
+                            <field name="progress_workorders_count" widget="statinfo" string="Progress"/>
+                        </button>
+                    </div>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1" class="oe_inline" attrs="{'invisible': [('state','in',('draft'))]}"/>
+                    </h1>
+                    <group col="4">
+                        <field name="vendor_id" options="{'no_create':True}" domain="[('supplier','=',True)]" required="1" attrs="{'readonly':[('state','in',('approved','finished'))]}"/>
+                        <field name="work_category_id" options="{'no_create':True}" domain="[('is_finished_wo','=',True)]" context="{'default_is_finished_wo':True}" readonly="1" force_save="1"/>
+                        <field name="work_order_id" options="{'no_create':True}" required="1" readonly="1" force_save="1"/>
+                        <field name="order_date" required="1" readonly="1" force_save="1"/>
+                        <field name="project_id" options="{'no_create':True}" required="1" attrs="{'readonly':[('state','in',('approved','finished'))]}"/>
+                        <field name="total_remaining_amt"/>
+                        <field name="show_finish_button" invisible="1"/>
+                        <field name="company_id" required="1" options="{'no_create': True}" groups="base.group_multi_company"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group>
+                        <button name="open_activity" class="oe_highlight" states="draft,confirm" string="Choose Subwork" type="object"/>
+                    </group>
+                    <notebook>
+                        <page name="sub_work_order_lines" string="Sub Work Activity">
+                            <field name="sub_work_order_ids" attrs="{'readonly':[('state','in',('approved','finished'))]}">
+                                <tree editable="bottom">
+                                    <field name="finished_work_order_line_id" readonly="1" options="{'no_create':True}" required="1"/>
+                                    <field name="to_be_received_qty" required="1" sum="Total To Be Received"/>
+                                    <field name="qty" required="1" sum="Total Qty"/>
+                                    <field name="received_qty" readonly="1" force_save="1" required="1" sum="Total Received Qty"/>
+                                    <field name="finished_sub_work_order_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="activity_done" invisible="1"/>
+                                    <button name="do_swo_progress" attrs="{'invisible':['|',('activity_done','=',True),('state','!=','approved')]}" type="object" string="Progress" class="oe_highlight"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="finished_construction_sub_work_order_tree_view" model="ir.ui.view">
+        <field name="name">finished.sub.work.order.tree</field>
+        <field name="model">finished.sub.work.order</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="order_date"/>
+                <field name="work_order_id"/>
+                <field name="project_id"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="construction_sub_work_order_search_view" model="ir.ui.view">
+        <field name="name">finished.sub.work.order.search</field>
+        <field name="model">finished.sub.work.order</field>
+        <field name="arch" type="xml">
+            <search string="Sub Work Order">
+                <field name="name"/>
+                <field name="work_order_id"/>
+                <field name="work_category_id"/>
+                <field name="vendor_id"/>
+                <field name="project_id"/>
+                <field name="state"/>
+                <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="confirm" string="Confirm" domain="[('state','=','confirm')]"/>
+                <filter name="approved" string="Approved" domain="[('state','=','approved')]"/>
+                <filter name="finished" string="Finished" domain="[('state','=','finished')]"/>
+                <filter string="Today" name="today" domain="[('order_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Work Order" name="work_order_id" context="{'group_by':'work_order_id'}"/>
+                    <filter string="Work Category" name="work_category_id" context="{'group_by':'work_category_id'}"/>
+                    <filter string="Vendor" name="vendor_id" context="{'group_by':'vendor_id'}"/>
+                    <filter string="State" name="state" context="{'group_by':'state'}"/>
+                    <filter string="Project" name="project_id" context="{'group_by':'project_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_finished_construction_sub_work_order" model="ir.actions.act_window">
+        <field name="name">Sub Work Order</field>
+        <field name="res_model">finished.sub.work.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_finished_construction_sub_work_order" id="menu_finished_construction_sub_work_order"
+        parent="menu_finished_workorder" sequence="55"/>
+
+
+    <record id="finished_sub_work_order_progress_form_view" model="ir.ui.view">
+        <field name="name">finished.sub.work.order.progress.form</field>
+        <field name="model">finished.sub.work.order.progress</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="do_confirm" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1" class="oe_inline" attrs="{'invisible': [('state','in',('draft'))]}"/>
+                    </h1>
+                    <group col="4">
+                        <field name="sub_work_order_id" options="{'no_create':True}" required="1" readonly="1" force_save="1"/>
+                        <field name="activity_id" options="{'no_create':True}" domain="[('finished_sub_work_order_id','=',sub_work_order_id),('activity_done','!=',True)]" required="1" readonly="1" force_save="1"/>
+                        <field name="qty" required="1" force_save="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="done_date" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="amount" readonly="1" force_save="1"/>
+                        <field name="invoice_total_amt" readonly="1" force_save="1"/>
+                        <field name="invoice_id" readonly="1"/>
+                        <field name="activity_done" invisible="1"/>
+                        <field name="company_id" required="1" options="{'no_create': True}" groups="base.group_multi_company" readonly="1" force_save="1"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="finished_sub_work_order_progress_tree_view" model="ir.ui.view">
+        <field name="name">finished.sub.work.order.progress.tree</field>
+        <field name="model">finished.sub.work.order.progress</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="activity_id"/>
+                <field name="done_date"/>
+                <field name="qty" sum="Total Qty"/>
+                <field name="amount" sum="Total Unit Price"/>
+                <field name="invoice_total_amt" sum="Total Amount Total"/>
+                <field name="state"/>
+                <field name="company_id" invisible="1" groups="base.group_multi_company"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="finished_sub_work_order_progress_form_view_sub" model="ir.ui.view">
+        <field name="name">finished.sub.work.order.progress.form</field>
+        <field name="model">finished.sub.work.order.progress</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0">
+                <header>
+                    <button name="do_confirm" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1" class="oe_inline" attrs="{'invisible': [('state','in',('draft'))]}"/>
+                    </h1>
+                    <group col="4">
+                        <field name="sub_work_order_id" options="{'no_create':True}" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="activity_id" options="{'no_create':True}" domain="[('finished_sub_work_order_id','=',sub_work_order_id),('activity_done','!=',True)]" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="qty" required="1" force_save="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="done_date" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="amount" readonly="1" force_save="1"/>
+                        <field name="invoice_total_amt" readonly="1" force_save="1"/>
+                        <field name="invoice_id" readonly="1"/>
+                        <field name="activity_done" invisible="1"/>
+                        <field name="company_id" required="1" options="{'no_create': True}" groups="base.group_multi_company"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="finished_sub_work_order_progress_tree_view_sub" model="ir.ui.view">
+        <field name="name">finished.sub.work.order.progress.tree</field>
+        <field name="model">finished.sub.work.order.progress</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0">
+                <field name="name"/>
+                <field name="activity_id"/>
+                <field name="done_date"/>
+                <field name="qty" sum="Total Qty"/>
+                <field name="amount" sum="Total Unit Price"/>
+                <field name="invoice_total_amt" sum="Total Amount Total"/>
+                <field name="state"/>
+                <field name="company_id" invisible="1" groups="base.group_multi_company"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="finished_sub_work_order_progress_search_view" model="ir.ui.view">
+        <field name="name">finished.sub.work.order.progress.search</field>
+        <field name="model">finished.sub.work.order.progress</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="activity_id"/>
+                <field name="state"/>
+                <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="confirm" string="Confirm" domain="[('state','=','confirm')]"/>
+                <filter string="Today" name="today" domain="[('done_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="State" name="state" context="{'group_by':'state'}"/>
+                    <filter string="Activity" name="activity_id" context="{'group_by':'activity_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_finished_sub_work_order_progress" model="ir.actions.act_window">
+        <field name="name">Progress</field>
+        <field name="res_model">finished.sub.work.order.progress</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_finished_sub_work_order_progress_sub" model="ir.actions.act_window">
+        <field name="name">Progress</field>
+        <field name="res_model">finished.sub.work.order.progress</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_finished_sub_work_order_progress_tree" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_finished_sub_work_order_progress_sub" />
+        <field name="view_id" ref="finished_sub_work_order_progress_tree_view_sub" />
+        <field name="view_mode">tree</field>
+        <field name="sequence" eval="1"/>
+    </record>
+
+    <record id="action_finished_sub_work_order_progress_form" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_finished_sub_work_order_progress_sub" />
+        <field name="view_id" ref="finished_sub_work_order_progress_form_view_sub" />
+        <field name="view_mode">form</field>
+        <field name="sequence" eval="2"/>
+    </record>
+
+    <menuitem action="action_finished_sub_work_order_progress" id="menu_construction_sub_work_order_progress"
+        parent="menu_finished_workorder" sequence="58"/>
+
+
+    <record id="finished_construction_work_order_activity_form_view" model="ir.ui.view">
+        <field name="name">finished.construction.work.activity.form</field>
+        <field name="model">finished.construction.work.activity</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="work_order_id" invisible="1"/>
+                    <field name="sub_work_order_id" invisible="1"/>
+
+                    <group>
+                        <field name="select_type" widget="radio" class="oe_edit_only" options="{'horizontal': true}"/>
+                    </group>
+
+                    <group colspan="4">
+                        <separator string="Choose Subwork" colspan="4"/>
+                        <newline/>
+                        <field name="wizard_activity_ids" nolabel="1" context="{'default_work_order_id':work_order_id}">
+                            <tree editable="bottom" create="0">
+                                <field name="select" />
+                                <field name="work_activity_id" options="{'no_create':True}" required="1" domain="[('finished_work_order_id','=',work_order_id)]"/>
+                                <field name="work_order_id" options="{'no_create':True}" invisible="1"/>
+                                <field name="wizard_work_activity_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="do_confirm" class="oe_highlight" string="Confirm" type="object"/>
+                    or
+                    <button class="oe_highlight" special="cancel" string="Cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="finished_construction_work_order_open_activity_form_view" model="ir.ui.view">
+        <field name="name">finished.construction.work.order.activity.form</field>
+        <field name="model">finished.construction.work.order.activity</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="work_order_id" invisible="1"/>
+                    <group>
+                        <field name="select_type" widget="radio" class="oe_edit_only" options="{'horizontal': true}"/>
+                    </group>
+                    <group colspan="4">
+                        <separator string="Choose Subwork" colspan="4"/>
+                        <newline/>
+                        <field name="wizard_activity_ids" nolabel="1">
+                            <tree editable="bottom" create="0">
+                                <field name="select" />
+                                <field name="name" required="1"/>
+                                <field name="description" required="1"/>
+                                <field name="finished_wizard_work_order_activity_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="do_confirm" class="oe_highlight" string="Confirm" type="object"/>
+                    or
+                    <button class="oe_highlight" special="cancel" string="Cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="wizard_change_vendor_form_view" model="ir.ui.view">
+        <field name="name">wizard.change.vendor.form</field>
+        <field name="model">wizard.change.vendor</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="vendor_id" options="{'no_create':True}" domain="[('supplier','=',True)]" required="1"/>
+                        <field name="reason"/>
+                        <field name="sub_work_order_id" invisible="1" required="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="do_confirm" class="oe_highlight" string="Confirm" type="object"/>
+                    or
+                    <button class="oe_highlight" special="cancel" string="Cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    </data>
+</odoo>

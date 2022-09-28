@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- account.report.general.ledger inherit form view -->
+    <record id="account_report_general_ledger_view" model="ir.ui.view">
+        <field name="name">account.report.general.ledger.inherit.view.form</field>
+        <field name="model">account.report.general.ledger</field>
+        <field name="inherit_id" ref="account.account_report_general_ledger_view"/>
+        <field name="arch" type="xml">
+            <field name="display_account" position="after">
+                <field name="account_ids" widget="many2many_tags"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- account.report.partner.ledger inherit form view -->
+    <record id="account_report_partner_ledger_view" model="ir.ui.view">
+        <field name="name">account.report.partner.ledger.inherit.view.form</field>
+        <field name="model">account.report.partner.ledger</field>
+        <field name="inherit_id" ref="account.account_report_partner_ledger_view"/>
+        <field name="arch" type="xml">
+            <field name="reconciled" position="after">
+                <field name="partner_ids" widget="many2many_tags"/>
+            </field>
+        </field>
+    </record>
+
+    <template id="account.report_partnerledger">
+        <t t-call="report.html_container">
+            <t t-set="data_report_margin_top" t-value="12"/>
+            <t t-set="data_report_header_spacing" t-value="9"/>
+            <t t-set="data_report_dpi" t-value="110"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.internal_layout">
+                    <div class="page">
+                        <h2>Partner Ledger</h2>
+    
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <strong>Company:</strong>
+                                <p t-esc="res_company.name"/>
+                            </div>
+                            <div class="col-xs-3">
+                                <t t-if="data['form']['date_from']"><strong>Date from :</strong> <span t-esc="data['form']['date_from']"/><br/></t>
+                                <t t-if="data['form']['date_to']"><strong>Date to :</strong> <span t-esc="data['form']['date_to']"/></t>
+                            </div>
+                            <div class="col-xs-3">
+                                <strong>Target Moves:</strong>
+                                <p t-if="data['form']['target_move'] == 'all'">All Entries</p>
+                                <p t-if="data['form']['target_move'] == 'posted'">All Posted Entries</p>
+                            </div>
+                        </div>
+    
+    
+    
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>JRNL</th>
+                                    <th>Account</th>
+                                    <th>Ref</th>
+                                    <th>Debit</th>
+                                    <th>Credit</th>
+                                    <th>Balance</th>
+                                    <th t-if="data['form']['amount_currency']">Currency</th>
+                                </tr>
+                            </thead>
+                            <t t-set="debit" t-value="sum([l.debit for l in request.env['account.move.line'].search([('partner_id','=',o.id),('date','&lt;',data['form']['date_from'])])])"/>
+                            <t t-set="credit" t-value="sum([l.credit for l in request.env['account.move.line'].search([('partner_id','=',o.id),('date','&lt;',data['form']['date_from'])])])"/>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4">
+                                            <strong>Initial Balance</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-esc="debit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-esc="credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-esc="debit - credit" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                </tr>
+    
+                                <tr>
+                                    <td colspan="4">
+                                            <strong t-esc="o.ref"/>
+                                            - <strong t-esc="o.name"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-esc="sum_partner(data, o, 'debit')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-esc="sum_partner(data, o, 'credit')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-esc="sum_partner(data, o, 'debit - credit')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                </tr>
+    
+                                <tr t-foreach="lines(data, o)" t-as="line">
+                                    <td>
+                                        <span t-esc="line['date']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line['code']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line['a_code']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line['displayed_name']"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="line['debit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="line['credit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="line['progress']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td class="text-right" t-if="data['form']['amount_currency']">
+                                        <t t-if="line['currency_id']">
+                                          <span t-esc="line['amount_currency']" t-options="{'widget': 'monetary', 'display_currency': line['currency_id']}"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wizard_project_report_form_view" model="ir.ui.view">
+        <field name="name">wizard.project.report.form</field>
+        <field name="model">wizard.project.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <group col="4">
+                    <field name="start_date" attrs="{'required':[('sorted_by','!=','Work Order')],
+                        'invisible':[('sorted_by','=','Work Order')]}"/>
+                    <field name="end_date" attrs="{'required':[('sorted_by','!=','Work Order')],
+                        'invisible':[('sorted_by','=','Work Order')]}"/>
+                    <field name="project_id" required="1" options="{'no_create':True}"/>
+                    <field name="sorted_by" required="1"/>
+                </group>
+
+                <footer>
+                    <button name="do_confirm" class="oe_highlight" string="Print Report" type="object"/>
+                    or
+                    <button class="oe_highlight" special="cancel" string="Cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    
+
+    <record id="action_wizard_project_report" model="ir.actions.act_window">
+        <field name="name">Project Report</field>
+        <field name="res_model">wizard.project.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem action="action_wizard_project_report" id="menu_wizard_project_report"
+        parent="sub_menu_register" sequence="80"/>
+
+</odoo>

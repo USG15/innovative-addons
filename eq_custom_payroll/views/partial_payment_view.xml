@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="payslip_partial_payment_tree_view" model="ir.ui.view">
+        <field name="name">payslip.partial.payment.tree</field>
+        <field name="model">payslip.partial.payment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="acc_date"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="payslip_partial_payment_form_view" model="ir.ui.view">
+        <field name="name">payslip.partial.payment.form</field>
+        <field name="model">payslip.partial.payment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="fetch_payslip" class="oe_highlight" states="draft" string="Fetch Payslip" type="object"/>
+                    <button name="do_confirm" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                    </group>
+                    <group col="4">
+                        <field name="acc_date" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>
+                        <field name="company_id" required="1" options="{'no_create':True}" groups="base.group_multi_company" attrs="{'readonly':[('state','=','confirm')]}"/>
+                    </group>
+
+                    <notebook>
+                        <page name="payment_line" string="Payment Lines">
+                            <field name="partial_payment_lines" attrs="{'readonly':[('state','=','confirm')]}">
+                                <tree editable="bottom" create="0">
+                                    <field name="sr_no"/>
+                                    <field name="emp_code" readonly="1" force_save="1"/>
+                                    <field name="employee_id" required="1" options="{'no_create':True}" readonly="1" force_save="1"/>
+                                    <field name="payslip_id" invisible="0" readonly="1" force_save="1"/>
+                                    <field name="journal_id" readonly="1" force_save="1"/>
+                                    <field name="other_charges" sum="Total Charges"/>
+                                    <field name="remaining_amount" readonly="1" string="Amount Payable" force_save="1" sum="Amount Payable"/>
+                                    <field name="amount" string="Payslip Amount" sum="Payslip Amount"/>
+                                    <field name="total_paid_amount" sum="Paid Amount"/>
+                                    <field name="partial_payment_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Other Info">
+                            <group>
+                                <field name="comment"  attrs="{'readonly':[('state','=','confirm')]}"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_payslip_partial_payment" model="ir.actions.act_window">
+        <field name="name">Payslip Payment</field>
+        <field name="res_model">payslip.partial.payment</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_payslip_partial_payment" id="menu_payslip_partial_payment"
+        parent="hr_payroll.menu_hr_payroll_root" />
+
+    <record id="wizard_payslip_payment_form_view" model="ir.ui.view">
+        <field name="name">wizard.payslip.payment.form</field>
+        <field name="model">wizard.payslip.payment</field>
+        <field name="arch" type="xml">
+            <form>
+                <group col="4">
+                    <field name="start_date" required="1"/>
+                    <field name="end_date" required="1"/>
+                </group>
+                <group>
+                    <field name="partial_payment_id" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="do_confirm" string="Confirm"
+                        type="object" class="oe_highlight"/>
+                    or
+                    <button string="Close" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
