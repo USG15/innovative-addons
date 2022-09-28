@@ -185,8 +185,8 @@ class AccountStandardLedger(models.TransientModel):
                                     ('all', 'All Entries'),
                                     ], string='Target Moves', required=True, default='posted')
     periode_date = fields.Many2one('account.report.standard.ledger.periode', 'Periode', default=_get_periode_date, help="Auto complete Start and End date.")
-    month_selec = fields.Selection([(1, '01 Junary'), (2, '02 Febuary'), (3, '03 March'), (4, '04 April'), (5, '05 May'), (6, '06 June'),
-                                    (7, '07 Jully'), (8, '08 August'), (9, '09 September'), (10, '10 October'), (11, '11 November'), (12, '12 December')],
+    month_selec = fields.Selection([(1, '01 January'), (2, '02 February'), (3, '03 March'), (4, '04 April'), (5, '05 May'), (6, '06 June'),
+                                    (7, '07 July'), (8, '08 August'), (9, '09 September'), (10, '10 October'), (11, '11 November'), (12, '12 December')],
                                    string='Month')
     result_selection = fields.Selection([('customer', 'Customers'),
                                          ('supplier', 'Suppliers'),
@@ -664,7 +664,7 @@ class AccountStandardLedger(models.TransientModel):
             AND ro.report_id = %s
             AND aml.company_id = %s
             AND (CASE
-                    WHEN %s = 'journal' THEN aml.date >= %s
+                    WHEN %s IN ('partner','journal','account') THEN aml.date >= %s
                     WHEN aml.date >= %s THEN %s != 'open'
                     ELSE acc.type_third_parties IN ('supplier', 'customer') AND (aml.full_reconcile_id IS NULL OR mif.id IS NOT NULL)
                 END)
