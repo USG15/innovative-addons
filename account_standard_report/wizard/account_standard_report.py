@@ -191,7 +191,7 @@ class AccountStandardLedger(models.TransientModel):
     result_selection = fields.Selection([('customer', 'Customers'),
                                          ('supplier', 'Suppliers'),
                                          ('customer_supplier', 'Customers and Suppliers')
-                                         ], string="Partner's", required=True, default='supplier')
+                                         ], string="Partner's", required=True, default='customer_supplier')
     report_name = fields.Char('Report Name')
     compact_account = fields.Boolean('Compacte account.', default=False)
     report_id = fields.Many2one('account.report.standard.ledger.report')
@@ -464,10 +464,9 @@ class AccountStandardLedger(models.TransientModel):
         WITH matching_in_futur_before_init (id) AS
         (
         SELECT DISTINCT
-            afr.id as id
+            aml.id as id
         FROM
-            account_full_reconcile afr
-        INNER JOIN account_move_line aml ON aml.full_reconcile_id=afr.id
+            account_move_line aml
         WHERE
             aml.company_id = %s
             AND aml.date >= %s
@@ -490,7 +489,7 @@ class AccountStandardLedger(models.TransientModel):
             COALESCE(SUM(aml.balance), 0) AS balance,
             COALESCE(SUM(aml.balance), 0) AS cumul_balance,
             %s AS company_currency_id,
-            FALSE as reconciled,
+            TRUE as reconciled,
             MIN(ro.id) AS report_object_id
         FROM
             account_report_standard_ledger_report_object ro
@@ -508,7 +507,7 @@ class AccountStandardLedger(models.TransientModel):
             AND aml.journal_id IN %s
             AND aml.account_id IN %s
             AND (%s IN ('account', 'journal') OR aml.partner_id IN %s)
-            AND ((%s AND acc.compacted = TRUE) OR acc.type_third_parties = 'no' OR (aml.full_reconcile_id IS NOT NULL AND mif.id IS NULL))
+            AND ((%s AND acc.compacted = TRUE) OR acc.type_third_parties = 'no' OR (aml.full_reconcile_id IS NULL AND mif.id IS NOT NULL))
         GROUP BY
             group_by_key
         HAVING
@@ -562,10 +561,9 @@ class AccountStandardLedger(models.TransientModel):
         WITH matching_in_futur_before_init (id) AS
         (
             SELECT DISTINCT
-                afr.id AS id
+                aml.id AS id
             FROM
-                account_full_reconcile afr
-            INNER JOIN account_move_line aml ON aml.full_reconcile_id=afr.id
+                account_move_line aml
             WHERE
                 aml.company_id = %s
                 AND aml.date >= %s
@@ -574,10 +572,9 @@ class AccountStandardLedger(models.TransientModel):
         matching_in_futur_after_date_to (id) AS
         (
             SELECT DISTINCT
-                afr.id AS id
+                aml.id AS id
             FROM
-                account_full_reconcile afr
-                INNER JOIN account_move_line aml ON aml.full_reconcile_id = afr.id
+                account_move_line aml
             WHERE
                 aml.company_id = %s
                 AND aml.date > %s
@@ -988,7 +985,6 @@ class AccountStandardLedger(models.TransientModel):
                     LEFT JOIN res_partner rep ON (rep.id = raml.partner_id)
                     LEFT JOIN account_move ml ON (ml.id = raml.move_id)
                     LEFT JOIN account_move_line aml ON (aml.id = raml.move_line_id)
-                    LEFT JOIN account_full_reconcile afr ON (raml.full_reconcile_id = afr.id)
                     LEFT JOIN account_analytic_account an_acc ON (raml.analytic_account_id = an_acc.id)
                     LEFT JOIN res_currency cr ON (raml.currency_id = cr.id)
                 WHERE
